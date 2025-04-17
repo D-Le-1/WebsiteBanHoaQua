@@ -281,7 +281,7 @@ const Header: React.FC = () => {
             <span>▼</span>
           </button>
           {dropdownOpen && (
-            <div className="absolute right-0 bg-white shadow-md mt-2 rounded w-24 z-20">
+            <div className="absolute right-0 sm:right-10 md:right-10 lg:right-72 bg-white shadow-md mt-2 rounded w-24 z-20">
               <p
                 className="p-2 cursor-pointer hover:bg-gray-200"
                 onClick={() => changeLanguage("en")}
