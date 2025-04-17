@@ -12,6 +12,12 @@ import ProductLike from "../pages/ProductLike"
 import AdminProduct from "../pages/AdminProduct"
 import Admin from "../pages/Admin"
 import AdminOrder from "../pages/OrdersAdmin"
+import Chat from "../pages/Chat"
+import AdminCategory from "../pages/AdminCategory"
+import AdminUser from "../pages/AdminUser"
+import UserOrder from "../pages/UserOrders"
+import CouponPage from "../components/admin/Coupon"
+import CategoryUser from "../pages/CategoryUser"
 
 export const routes: RouteObject[] = [
   {
@@ -40,42 +46,72 @@ export const routes: RouteObject[] = [
     children: []
   },
   {
-    path:"/productdetail/:id",
+    path: "/productdetail/:id",
     element: <ProductDetail />,
     children: []
   },
   {
-    path:"/cart",
-    element: <Cart/>,
+    path: "/cart",
+    element: <Cart />,
     children: []
   },
   {
-    path:'/checkout',
+    path: "/checkout",
     element: <Checkout />,
     children: []
   },
   {
-    path:'/profile',
-    element: <Profile/>,
-    children:[]
+    path: "/profile",
+    element: <Profile />,
+    children: []
   },
   {
-    path:'/wishlist',
+    path: "/wishlist",
     element: <ProductLike />,
     children: []
   },
   {
-    path:'/admin',
-    element:<Admin/>,
-    children:[]
+    path: "/admin",
+    element: <Admin />,
+    children: []
   },
   {
-    path:'/admin/product',
-    element: <AdminProduct/>,
+    path: "/admin/product",
+    element: <AdminProduct />,
+    children: []
+  },
+  {
+    path: "/admin/category",
+    element: <AdminCategory />,
+    children: []
+  },
+  {
+    path: "/admin/order",
+    element: <AdminOrder />,
+    children: []
+  },
+  {
+    path: "/chat",
+    element: <Chat />,
+    children: []
+  },
+  {
+    path: "/admin/user",
+    element: <AdminUser />,
+    children: []
+  },
+  {
+    path: "/orders",
+    element: <UserOrder />,
     children: []
   },{
-    path:'/admin/order',
-    element:<AdminOrder/>,
-    children:[]
+    path: "/admin/coupon",
+    element: <CouponPage />,
+    children: []
+  },
+  {
+    path: '/category/:categoryName',
+    element: <CategoryUser/>,
+    children: []
   }
 ]

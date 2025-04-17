@@ -1,0 +1,45 @@
+{
+  "common": {
+    "button": {
+      "search": "Search",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "save": "Save"
+    }
+  },
+  "menu": {
+    "signin": "Sign In",
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "myaccount": "My Account"
+  },
+  "banner": {
+    "slide1": "Slide 1",
+    "slide2": "Slide 2",
+    "slide3": "Slide 3",
+    "slide4": "Slide 4",
+    "slide5": "Slide 5",
+    "slide6": "Slide 6"
+  },
+  "support": {
+    "freeDelivery": "FREE AND FAST DELIVERY",
+    "freeDeliveryDesc": "Free delivery for all orders over $140",
+    "customerService": "24/7 CUSTOMER SERVICE",
+    "customerServiceDesc": "Friendly 24/7 customer support",
+    "moneyBack": "MONEY BACK GUARANTEE",
+    "moneyBackDesc": "We return money within 30 days"
+  },
+  "productPage": {
+    "category": "Category",
+    "ourProduct": "Our Product",
+    "explore": "Delicious Fruit Of The Day",
+    "stock": "Stock",
+    "addToCart": "Add to Cart"
+  },
+  "common": {
+    "addedToCartSuccess": "🛒 Product has been added to your cart!",
+    "loading": "Loading...",
+    "error": "An error occurred. Please try again."
+  }
+}

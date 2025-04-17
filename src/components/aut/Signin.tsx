@@ -54,6 +54,27 @@ const SigninPage = () => {
               placeholder="Name"
               className="w-96 border-b-2 p-2 mb-4 outline-none focus:border-black"
             />
+            {errors.name && (
+              <p className="mt-1 text-sm text-red-600">
+                  {errors.name.message}
+              </p>
+            )}
+            <input id="phone"
+            {...register("phone")} 
+            type="text" 
+            placeholder="Phone" 
+            className="w-96 border-b-2 p-2 mb-4 outline-none focus:border-black" />
+            {errors.phone && (
+              <p className="mt-1 text-sm text-red-600">
+                  {errors.phone.message}
+              </p>
+            )}
+            <input id="address"{...register("address")} type="text" placeholder="Address" className="w-96 border-b-2 p-2 mb-4 outline-none focus:border-black" />
+            {errors.address && (
+              <p className="mt-1 text-sm text-red-600">
+                  {errors.address.message}
+              </p>
+            )}
           <input
             id="email"
             {...register("email", {

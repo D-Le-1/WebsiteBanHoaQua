@@ -1,0 +1,45 @@
+{
+  "common": {
+    "button": {
+      "search": "Tìm kiếm",
+      "cancel": "Hủy",
+      "delete": "Xóa",
+      "save": "Lưu"
+    }
+  },
+  "menu": {
+    "signin": "Đăng nhập",
+    "home": "Trang chủ",
+    "about": "Giới thiệu",
+    "contact": "Liên hệ",
+    "myaccount": "Tài khoản của tôi"
+  },
+  "banner": {
+    "slide1": "Trang chiếu 1",
+    "slide2": "Trang chiếu 2",
+    "slide3": "Trang chiếu 3",
+    "slide4": "Trang chiếu 4",
+    "slide5": "Trang chiếu 5",
+    "slide6": "Trang chiếu 6"
+  },
+  "support": {
+    "freeDelivery": "GIAO HÀNG MIỄN PHÍ VÀ NHANH CHÓNG",
+    "freeDeliveryDesc": "Giao hàng miễn phí cho tất cả đơn trên 140.000₫",
+    "customerService": "HỖ TRỢ KHÁCH HÀNG 24/7",
+    "customerServiceDesc": "Hỗ trợ khách hàng thân thiện 24/7",
+    "moneyBack": "ĐẢM BẢO HOÀN TIỀN",
+    "moneyBackDesc": "Chúng tôi hoàn tiền trong vòng 30 ngày"
+  },
+  "productPage": {
+    "category": "Danh mục",
+    "ourProduct": "Sản phẩm của chúng tôi",
+    "explore": "Trái ngon hôm nay",
+    "stock": "Kho:",
+    "addToCart": "Thêm vào giỏ hàng"
+  },
+  "common": {
+    "addedToCartSuccess": "🛒 Sản phẩm đã được thêm vào giỏ hàng!",
+    "loading": "Đang tải...",
+    "error": "Đã xảy ra lỗi. Vui lòng thử lại."
+  }
+}

@@ -1,9 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchProductDetail } from "../api/api";
+import { useQuery } from "@tanstack/react-query"
+import { fetchProductDetail } from "../api/api"
 
-export const useProductDetail = (id: number) => {
-    return useQuery({
-        queryKey: ["productDetail", id],
-        queryFn: () => fetchProductDetail(id),
-    });
-};
+export const useProductDetail = (id: string) => {
+  return useQuery({
+    queryKey: ["productDetail", id],
+    queryFn: () => fetchProductDetail(id),
+    enabled: !!id
+  })
+}

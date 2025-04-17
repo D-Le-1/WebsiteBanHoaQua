@@ -1,5 +1,4 @@
-import React, { useState } from "react"
-import SidebarAdmin from "../sidebar/sideBarAdmin"
+import Sidebar from "./../sidebar/sideBar"
 import {
   Table,
   TableBody,
@@ -11,43 +10,24 @@ import {
   Button,
   Stack
 } from "@mui/material"
-import { useOrder } from "../../useQuery/hooks/useOrder"
-import { editStatus } from "../../useQuery/api/api"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { toast } from "react-toastify"
-import { useParams } from "react-router-dom"
+import { useOrderUser } from "../../useQuery/hooks/useOrderUser"
 
-const OrderPage: React.FC = () => {
-  const queryClient = useQueryClient()
-  const { id } = useParams<{ id: number }>()
-  const { data } = useOrder()
-
-    const mutation = useMutation({
-      mutationFn: editStatus,
-      onSuccess: () => {
-        queryClient.invalidateQueries(["orders"]) // Làm mới danh sách
-        toast.success("Đã thay đổi trạng thái", { position: "top-right" })
-      }
-    })
-
-    const changeStatusHandle = (id: number, currentStatus: string) => {
-      const newStatus = currentStatus === "pending" ? "confirmed" : "pending"
-      mutation.mutate({ id, newStatus })
-    }
-
+const OrderPageUser = () => {
+  const { data } = useOrderUser()
+  console.log(data)
   return (
-    <div className="p-6">
-      <div className="flex space-x-10">
-        <SidebarAdmin />
-        <div className="w-screen">
-          <h1 className="text-2xl font-bold mb-4">List Order</h1>
+    <div className="max-w-7xl mx-auto p-8 space-y-10 flex flex-col md:flex-row lg:flex-col">
+      <div className="space-x-2">
+        <span className="text-sm text-zinc-500">Home /</span>
+        <span className="text-sm">My Orders</span>
+      </div>
+      <div className="flex space-x-44">
+        <Sidebar />
+        <div>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
                 <TableRow sx={{ backgroundColor: "aqua" }}>
-                  <TableCell className="border border-gray-300 p-2">
-                    ID
-                  </TableCell>
                   <TableCell className="border border-gray-300 p-2">
                     Name
                   </TableCell>
@@ -81,9 +61,6 @@ const OrderPage: React.FC = () => {
                 {data?.orders.map((order) => (
                   <TableRow key={order._id}>
                     <TableCell className="border border-gray-300 p-2">
-                      {order._id}
-                    </TableCell>
-                    <TableCell className="border border-gray-300 p-2">
                       {order.name}
                     </TableCell>
                     <TableCell className="border border-gray-300 p-2">
@@ -102,9 +79,10 @@ const OrderPage: React.FC = () => {
                       {order.products.map((product) => (
                         <div
                           key={product._id}
-                          className="flex space-x-3 items-center"
+                          className="flex space-x-3 items-center w-56"
                         >
                           <img
+                            crossorigin="anonymous | use-credentials"
                             className="w-10 h-10"
                             src={product.productImage}
                             alt=""
@@ -124,33 +102,8 @@ const OrderPage: React.FC = () => {
                     <TableCell className="border border-gray-300 p-2">
                       {order.status}
                     </TableCell>
-                    <TableCell className="border border-gray-300 p-2 text-center">
-                      <div className="flex items-center justify-center space-x-2">
-                        <span
-                          className={`px-3 py-1 h-fit text-white text-sm font-semibold 
-                                                ${
-                                                  order.status === "pending"
-                                                    ? "bg-yellow-500"
-                                                    : "bg-green-500"
-                                                }`}
-                        >
-                          {order.status === "pending"
-                            ? "⏳ Pending"
-                            : "✅ Completed"}
-                        </span>
-                        <Button
-                          onClick={() =>
-                            changeStatusHandle(order._id, order.status)
-                          }
-                          variant="contained"
-                          color={
-                            order.status === "pending" ? "success" : "warning"
-                          }
-                          className="transition-transform transform hover:scale-105"
-                        >
-                          {order.status === "pending" ? "Hoàn tất" : "Đặt lại"}
-                        </Button>
-                      </div>
+                    <TableCell>
+                      <Button>Cancel</Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -163,4 +116,4 @@ const OrderPage: React.FC = () => {
   )
 }
 
-export default OrderPage
+export default OrderPageUser

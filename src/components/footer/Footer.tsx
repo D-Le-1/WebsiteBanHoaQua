@@ -8,7 +8,7 @@ import { Link } from "react-router-dom"
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-white py-10 px-5 md:px-20">
+    <footer className="bg-orange-100 text-black py-10 px-5 md:px-20">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
         {/* Exclusive Section */}
         <div>
