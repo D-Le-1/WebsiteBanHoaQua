@@ -104,7 +104,7 @@ const ProductPage = ({
     <div className="container mx-auto p-4 space-y-5">
       <p className="text-2xl font-bold ">{t("productPage.category")}</p>
       <div className="flex justify-center space-x-10">
-        {category?.categories.map((category) => (
+        {category?.categories?.map((category) => (
           <Link to={`category/${category.name}`}>
             <CategoryComponent name={category.name} />
           </Link>
