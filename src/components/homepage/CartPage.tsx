@@ -1,6 +1,18 @@
 import { useState, useEffect } from "react"
 import QuantitySelector from "../rating/ButtonQuanti"
 import { Link, useNavigate } from "react-router-dom"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  Stack,
+  TextField
+} from "@mui/material"
 import { useTranslation } from "react-i18next"
 
 const CartPage = () => {
@@ -20,15 +32,19 @@ const CartPage = () => {
     setCart(savedCart)
   }, [])
 
-  const calculateTotals = () => {
-    const newSubtotal = cart.reduce(
-      (acc, item) => acc + item.product.salePrice * item.quantity,
-      0
-    )
-    localStorage.setItem("Total", JSON.stringify(newSubtotal))
-    setSubtotal(newSubtotal)
-    setTotal(newSubtotal)
-  }
+  useEffect(() => {
+    const calculateTotals = () => {
+      const newSubtotal = cart.reduce(
+        (acc, item) => acc + item.product.salePrice * item.quantity,
+        0
+      )
+      localStorage.setItem("Total", JSON.stringify(newSubtotal))
+      setSubtotal(newSubtotal)
+      setTotal(newSubtotal)
+    }
+  
+    calculateTotals()
+  }, [cart])
 
   const updateQuantity = (id: String, quantity) => {
     const updatedCart = cart.map((item) =>
@@ -52,67 +68,70 @@ const CartPage = () => {
         <span className="text-sm text-zinc-500">Account /</span>
         <span className="text-sm">Cart</span>
       </div>
-      <div className="flex flex-col md:flex-row lg:flex-row border-b pb-3 font-semibold justify-around">
-        <span>Product</span>
-        <span>Price</span>
-        <span>Quantity</span>
-        <span>Subtotal</span>
-      </div>
-      {cart.length === 0 ? (
-        <p className="text-center text-gray-500">
-          🛒 Giỏ hàng của bạn đang trống.
-        </p>
-      ) : (
-        cart.map((item) => (
-          <div
-            key={item.product._id}
-            className="flex flex-col md:flex-row lg:flex-row items-center justify-around p-4 mt-4 shadow-sm"
-          >
-            <div className="flex items-center space-x-5 -ml-5">
-              <div className="relative group">
-                <button
-                  onClick={() => removeItem(item.product._id)}
-                  className="absolute top-0 -left-1 bg-red-500 text-white font-bold text-[9px] h-4 w-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  X
-                </button>
-                <img
-                  crossorigin="anonymous | use-credentials"
-                  src={item.product.images[0]}
-                  alt={item.product.name}
-                  className="w-12 h-12"
-                />
-              </div>
-              <span>{item.product.name}</span>
-            </div>
-            <span className="-ml-[80px]">${item.product.salePrice}</span>
-            <input
-              type="number"
-              value={item.quantity}
-              onChange={(e) =>
-                updateQuantity(item.product._id, parseInt(e.target.value) || 1)
-              }
-              className="w-16 h-10 border rounded-md text-center"
-              min="1"
-            />
-            <span className="pl-5">
-              ${Math.round(item.product.salePrice * item.quantity)}
-            </span>
-          </div>
-        ))
-      )}
-      <div className="flex justify-around mt-6 space-x-44">
-        <Link to="/" className="border px-4 py-2 rounded font-bold shadow-lg">
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#6cdc26" }}>
+              <TableCell>Product</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Quantity</TableCell>
+              <TableCell>Subtotal</TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {cart.length === 0 ? (
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell className="text-center text-gray-500">
+                  🛒 Giỏ hàng của bạn đang trống.
+                </TableCell>
+              </TableRow>
+                ) : (
+                  cart.map((item) => (
+                    <TableRow
+                      key={item.product._id}
+                    >
+                      <TableCell>
+                          <img
+                            crossorigin="anonymous | use-credentials"
+                            src={item.product.images[0]}
+                            alt={item.product.name}
+                            className="w-12 h-12"
+                          />
+                          <p>{item.product.name}</p>
+                      </TableCell>
+                      <TableCell className="-ml-[80px]">{item.product.salePrice}₫</TableCell>
+                      <TableCell>
+                      <input
+                        type="number"
+                        value={item.quantity}
+                        onChange={(e) =>
+                          updateQuantity(item.product._id, parseInt(e.target.value) || 1)
+                        }
+                        className="w-16 h-10 border rounded-md text-center"
+                        min="1"
+                      />
+                      </TableCell>
+                      <TableCell className="pl-5">
+                        {Math.round(item.product.salePrice * item.quantity)}₫
+                      </TableCell>
+                      <TableCell>
+                        <Button onClick={()=> removeItem(item.product._id)} variant="contained">Delete</Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <div className="flex flex-col sm:flex-row justify-center items-center mt-6 gap-4 sm:gap-6">
+        <Link to="/" className="w-full sm:w-auto px-4 py-2 border rounded-md font-bold text-black shadow-lg hover:bg-gray-100 transition-colors text-center">
           Return To Shop
         </Link>
-        <button
-          className="border px-4 py-2 rounded font-bold text-black shadow-lg"
-          onClick={calculateTotals}
-        >
-          Update Cart
-        </button>
       </div>
-      <div className="flex space-x-96">
+      <div className="flex flex-col items-center justify-between md:flex-row gap-10">
         <div className="space-x-5 flex">
           <input
             type="text"
@@ -123,35 +142,28 @@ const CartPage = () => {
             Apply Coupon
           </button>
         </div>
-        <div className="w-96 h-66 p-3 space-y-3 border rounded-md border-black">
-          <h2 className="font-bold">Cart Total</h2>
-          <div className="border-0 border-b border-black h-10">
-            <span>Subtotal: </span>
-            <span className="pl-60">${Math.round(subtotal)}</span>
+        <div className="w-full max-w-md p-4 space-y-4 border rounded-md border-black md:max-w-lg">
+          <h2 className="text-lg font-bold md:text-xl">Cart Total</h2>
+          <div className="flex justify-between items-center border-b border-black pb-2">
+            <span>Subtotal:</span>
+            <span>{Math.round(subtotal)}₫</span>
           </div>
-          <div className="border-0 border-b h-10 border-black">
-            <span>Shipping: </span>
-            <span className="pl-60">Free</span>
+          <div className="flex justify-between items-center border-b border-black pb-2">
+            <span>Shipping:</span>
+            <span>Free</span>
           </div>
-          <div className="border-0 border-b h-10 border-black">
-            <span>Total: </span>
-            <span className="pl-[265px]">${Math.round(total)}</span>
+          <div className="flex justify-between items-center border-b border-black pb-2">
+            <span>Total:</span>
+            <span>{Math.round(total)}₫</span>
           </div>
-          {user ? (
+          <div className="flex justify-center">
             <button
-              onClick={() => navigate("/checkout")}
-              className="w-40 h-10 bg-red-400 ml-24 rounded-md text-white text-sm"
+              onClick={() => navigate(user ? "/checkout" : "/login")}
+              className="w-40 px-4 py-2 bg-red-400 rounded-md text-white text-sm hover:bg-red-500 transition-colors md:w-48"
             >
-              Proceed Checkout
+              Proceed to Checkout
             </button>
-          ) : (
-            <button
-              onClick={() => navigate("/login")}
-              className="w-40 h-10 bg-red-400 ml-24 rounded-md text-white text-sm"
-            >
-              Proceed Checkout
-            </button>
-          )}
+          </div>
         </div>
       </div>
     </div>

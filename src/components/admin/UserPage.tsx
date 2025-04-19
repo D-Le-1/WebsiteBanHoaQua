@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useUser } from "../../useQuery/hooks/useUser"
 import SidebarAdmin from "../sidebar/sideBarAdmin"
 import { useMutation } from "@tanstack/react-query"
@@ -20,6 +20,14 @@ import { useQueryClient } from "@tanstack/react-query"
 const UserPage = () => {
   const queryClient = useQueryClient()
   const { data, isLoading, isError } = useUser()
+  const [role, setRole] = useState()
+
+  useEffect(() => {
+    const roleData = localStorage.getItem("user")
+    if (roleData) {
+      setRole(JSON.parse(roleData))
+    }
+  }, [])
 
   const mutation = useMutation({
     mutationFn: changeRole,
@@ -100,17 +108,19 @@ const UserPage = () => {
                       {user.role}
                     </TableCell>
                     <TableCell className="border border-gray-300 p-2 text-center">
-                      <div className="flex items-center justify-center space-x-2">
-                        <Button
-                          onClick={
-                            () => changeRoleHandle(user._id, user.role) // Sử dụng user._id thay vì order.id
-                          }
-                          variant="contained"
-                          className="transition-transform transform hover:scale-105"
-                        >
-                          Change
-                        </Button>
-                      </div>
+                      {(role.role === "admin") && (
+                          <div className="flex items-center justify-center space-x-2">
+                            <Button
+                                onClick={
+                                () => changeRoleHandle(user._id, user.role) // Sử dụng user._id thay vì order.id
+                                }
+                                variant="contained"
+                                className="transition-transform transform hover:scale-105"
+                            >
+                                Change
+                            </Button>
+                          </div>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

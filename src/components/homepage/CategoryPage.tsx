@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import BannerSlide from '../rating/BannerSlide';
 import { useTranslation } from 'react-i18next';
 import { useCategory } from '../../useQuery/hooks/useCategory';
 import { Link, useParams } from 'react-router-dom';
 import CategoryComponent from '../sidebar/categoryComponent';
 import { useProductwithCate } from '../../useQuery/hooks/useProductwithCate';
+import Sort from '../sidebar/sortComponent';
 
 
 const CategoryPage = () => {
@@ -12,8 +13,9 @@ const CategoryPage = () => {
     const {t} = useTranslation()
     const {data: category} = useCategory()
     const { data, isLoading } = useProductwithCate({ categoryName });
+    const [sortOption, setSortOption] = useState("default");
 
-    console.log(data)
+    const currentCategory = category?.categories.find(cat => cat.name === categoryName);
 
     return (
         <div className="container mx-auto p-4 space-y-5">
@@ -26,7 +28,7 @@ const CategoryPage = () => {
                 ))}
             </div>
             <BannerSlide />
-            <h2 className="text-2xl font-bold text-orange-500 mb-4">Trái ngon hôm nay</h2>
+            <h2 className="text-2xl font-bold text-orange-500 mb-4">{currentCategory?.name}</h2>
 
             {isLoading ? (
                 <div className="text-center">Loading...</div>

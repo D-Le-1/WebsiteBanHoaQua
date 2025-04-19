@@ -21,7 +21,7 @@ const OrderPageUser = () => {
         <span className="text-sm text-zinc-500">Home /</span>
         <span className="text-sm">My Orders</span>
       </div>
-      <div className="flex space-x-44">
+      <div className="flex">
         <Sidebar />
         <div>
           <TableContainer component={Paper}>

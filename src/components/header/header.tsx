@@ -16,8 +16,6 @@ function Search() {
   const [cartQuantity, setCartQuantity] = useState<number>(0)
   const [dropdownOpenMb, setDropdownOpenMb] = useState(false)
 
-
-
   useEffect(() => {
     const userData = localStorage.getItem("user")
     if (userData) {
@@ -47,6 +45,8 @@ function Search() {
     enabled: false
   })
 
+  console.log(products)
+
   return (
     <div className="flex items-center space-x-4 rounded-md mr-20">
       <div className="relative hidden md:block">
@@ -62,8 +62,8 @@ function Search() {
         </span>
         {searchItem && (
           <ul className="absolute z-10 bg-white shadow-md rounded w-full mt-2">
-            {Array.isArray(products?.data) && products.data.length > 0 ? (
-              products.data.map(
+            {Array.isArray(products?.products) && products.products.length > 0 ? (
+              products?.products.map(
                 (
                   product // ❌ Loại bỏ `.data`
                 ) => (
@@ -72,7 +72,7 @@ function Search() {
                     key={product.id}
                     className="p-2 hover:bg-gray-200 flex items-center space-x-4"
                   >
-                    <img src={product.images[0]} alt="" className="w-10 h-10" />
+                    <img crossorigin="anonymous" src={product.images[0]} alt="" className="w-10 h-10" />
                     <span>{product.name}</span>
                   </Link>
                 )

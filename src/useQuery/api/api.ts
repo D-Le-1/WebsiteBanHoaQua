@@ -139,7 +139,7 @@ export const editStatus = async ({ id, newStatus }) => {
 export const searchName = async ({ name }) => {
   try {
     const response = await axios.get(
-      `https://devapi.uniscore.vn/uri/api/products/search?name=${name}`
+      `http://localhost:8000/api/products/search?q=${name}`
     )
     return response.data
   } catch (error) {
@@ -273,3 +273,44 @@ export const getProductByCategory = async ({categoryName}) => {
   const response = await axios.get(`http://localhost:8000/api/products/category/${categoryName}`)
   return response.data
 }
+
+export const paymentMomo = async (payload) => {
+  try { 
+    const response = await axios.post('http://localhost:8000/api/payment/momo', {
+      amount: payload.amount,
+      orderInfo: payload.orderInfo,
+      orderData: payload.orderData // Thêm thông tin đơn hàng đầy đủ
+    });
+    
+    console.log('MoMo payment response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Lỗi khi thanh toán MoMo:', error);
+    throw error;
+  }
+};
+
+
+export const paymentVnpay = async (payload) => {
+  try {
+    const response = await axios.post("http://localhost:8000/api/payment/vnpay", {
+      amount: payload.amount,
+      orderInfo: {
+        productName: payload.orderInfo.productName,
+      },
+      orderData: payload.orderData, // Gửi orderData
+    });
+
+    console.log("VNPay payment response:", response.data);
+
+    if (response.data.success) {
+      window.location.href = response.data.paymentUrl;
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi thanh toán VNPay:", error);
+    throw error;
+  }
+};
+

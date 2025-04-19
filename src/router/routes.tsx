@@ -18,6 +18,8 @@ import AdminUser from "../pages/AdminUser"
 import UserOrder from "../pages/UserOrders"
 import CouponPage from "../components/admin/Coupon"
 import CategoryUser from "../pages/CategoryUser"
+import OrderSuccess  from "../pages/OrderSuccess"
+import OrderFailedPage from "../pages/OrderFailed"
 
 export const routes: RouteObject[] = [
   {
@@ -113,5 +115,15 @@ export const routes: RouteObject[] = [
     path: '/category/:categoryName',
     element: <CategoryUser/>,
     children: []
+  },
+  {
+    path:'/order-success',
+    element: <OrderSuccess />,
+    children:[]
+  },
+  {
+    path:'/order-failed',
+    element:<OrderFailedPage/>,
+    children:[]
   }
 ]

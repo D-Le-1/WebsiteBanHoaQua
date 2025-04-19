@@ -6,6 +6,8 @@ import { useCity } from "../../useQuery/hooks/useCity"
 import { useNavigate } from "react-router-dom"
 import { useCoupon } from "../../useQuery/hooks/useCoupon"
 import { useTranslation } from "react-i18next"
+import { paymentMomo } from "../../useQuery/api/api"
+import { paymentVnpay } from "../../useQuery/api/api"
 
 const CheckOutPage = () => {
   const navigate = useNavigate()
@@ -48,6 +50,44 @@ const CheckOutPage = () => {
     const savedCart = JSON.parse(localStorage.getItem("cart") || "[]")
     setCart(savedCart)
   }, [])
+
+  const vnpayMutation = useMutation({
+    mutationFn: paymentVnpay,
+    onSuccess: (data) => {
+      if (data?.paymentUrl) {
+        console.log("Redirecting to Vnpay payment page:", data.paymentUrl);
+        window.location.href = data.paymentUrl;
+        localStorage.removeItem("cart")
+      } else {
+        console.error("VNpay payment URL not found:", data);
+      }
+    }
+    ,
+    onError: (error) => {
+      toast.error("Thanh toán VNPAY thất bại, vui lòng thử lại!");
+      console.log("VNPAY payment error: ", error);
+    },
+  })
+
+  const momoMutation = useMutation({
+    mutationFn: paymentMomo,
+    onSuccess: (data) => {
+      if (data?.payUrl) {
+        console.log("Redirecting to MoMo payment page:", data.payUrl); 
+        window.location.href = data.payUrl; 
+        localStorage.removeItem("cart")
+      } else {
+        console.error("Momo payment URL not found:", data);
+      }
+    }
+    ,
+    onError: (error) => {
+      toast.error("Thanh toán Momo thất bại, vui lòng thử lại!");
+      console.log("Momo payment error: ", error);
+    },
+  });
+
+
   const mutation = useMutation({
     mutationFn: createOrders,
     onSuccess: (data) => {
@@ -93,18 +133,19 @@ const CheckOutPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleOrder = (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (
-      !formData.firstName.trim() ||
-      !formData.streetAddress.trim() ||
-      !formData.city.trim()
-    ) {
-      toast.error("Vui lòng điền đầy đủ thông tin trước khi đặt hàng!")
-      return
+  const handleOrder = (e) => {
+    e.preventDefault();
+  
+    // Kiểm tra xem người dùng đã điền đầy đủ thông tin chưa
+    if (!formData.firstName.trim() || !formData.streetAddress.trim() || !formData.city.trim()) {
+      toast.error("Vui lòng điền đầy đủ thông tin trước khi đặt hàng!");
+      return;
     }
-
+  
+    // Tạo ID cho đơn hàng
+    const orderId = `order-${Date.now()}`;
+  
+    // Tạo dữ liệu đơn hàng
     const OrderData = {
       name: formData.firstName,
       email: formData.email,
@@ -119,10 +160,39 @@ const CheckOutPage = () => {
       totalPrice: Math.round(total - discountAmount),
       discountAmount,
       paymentMethod: paymentMethod
+    };
+  
+    if (paymentMethod === "Momo") {
+
+      momoMutation.mutate({
+        amount: OrderData.totalPrice,
+        orderInfo: {
+          orderId,
+          productName: cart.map(item => item.product.name).join(", "),
+        },
+        orderData: OrderData
+      });
+  
+      return;
     }
-    console.log("OrderData gửi đi:", OrderData)
-    mutation.mutate(OrderData)
-  }
+
+    if (paymentMethod === "VNPAY") {
+      vnpayMutation.mutate({
+        amount: OrderData.totalPrice,
+        orderInfo: {
+          productName: cart.map((item) => item.product.name).join(", "),
+        },
+        orderData: OrderData, // Gửi toàn bộ OrderData để backend lưu
+      });
+  
+      return;
+    }
+
+  
+    console.log("OrderData gửi đi:", OrderData);
+    mutation.mutate(OrderData);
+  };
+  
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-10">
@@ -165,11 +235,11 @@ const CheckOutPage = () => {
             value={formData.city}
             onChange={handleChange}
           >
+            <option value="">-- Chọn Tỉnh, Thành Phố --</option>
             {data?.map((city) => (
               <option>{city.name}</option>
             ))}
           </select>
-          {/* <input type="text" className="w-96 h-12 p-2 shadow-md rounded-md" name="city" value={formData.city} onChange={handleChange}/> */}
           <p className="text-zinc-400 text-sm">Phone Number</p>
           <input
             value={formData.phone}
@@ -210,14 +280,14 @@ const CheckOutPage = () => {
                 <span>{item.product.name}</span>
                 <span className="text-md">x {item.quantity}</span>
                 <span className="font-medium">
-                  ${Math.round(item.product.salePrice * item.quantity)}
+                  {Math.round(item.product.salePrice * item.quantity)}₫
                 </span>
               </div>
             ))}
             <hr />
             <div className="flex justify-between items-center">
               <span>Subtotal:</span>
-              <span className="font-medium">${Math.round(total)}</span>
+              <span className="font-medium">{Math.round(total)}₫</span>
             </div>
             <div className="flex justify-between items-center">
               <span>Shipping:</span>
@@ -225,7 +295,7 @@ const CheckOutPage = () => {
             </div>
             <div className="flex justify-between items-center font-semibold text-lg">
               <span>Total:</span>
-              <span value={total}>${Math.round(total - discountAmount)}</span>
+              <span value={total}>{Math.round(total - discountAmount)}₫</span>
             </div>
             <hr />
             <div>
@@ -233,31 +303,22 @@ const CheckOutPage = () => {
                 <input
                   type="radio"
                   name="payment"
-                  value={paymentMethod}
                   onChange={() => setPaymentMethod("COD")}
                 />
                 <span>COD</span>
-                <span>
-                  <img src="images\bkash.png" className="w-10 h-7" alt="" />
-                </span>
-                <span>
-                  <img src="images\visa.png" className="w-10 h-3" alt="" />
-                </span>
               </label>
               <label className="flex items-center space-x-2 mt-2">
                 <input
                   type="radio"
                   name="payment"
-                  value={formData.paymentMethod}
-                  onChange={() => setPaymentMethod("Credit Card")}
+                  onChange={() => setPaymentMethod("VNPAY")}
                 />
-                <span>Bank</span>
+                <span>VNPAY</span>
               </label>
               <label className="flex items-center space-x-2 mt-2">
                 <input
                   type="radio"
                   name="payment"
-                  value={formData.paymentMethod}
                   onChange={() => setPaymentMethod("Momo")}
                 />
                 <span>Momo</span>
@@ -300,7 +361,6 @@ const CheckOutPage = () => {
         </div>
       </div>
     </div>
-  )
-}
-
+  );
+};
 export default CheckOutPage

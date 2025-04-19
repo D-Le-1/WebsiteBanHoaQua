@@ -6,8 +6,13 @@ import { Product, CartItem } from "../../useQuery/user/auth"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import { useCategory } from "../../useQuery/hooks/useCategory"
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import BannerSlide from "../rating/BannerSlide"
 import CategoryComponent from "../sidebar/categoryComponent"
+import Sort from "../sidebar/sortComponent"
+
 
 function SupportSection() {
   const { t } = useTranslation()
@@ -57,20 +62,55 @@ const ProductPage = ({
   const [currentPage, setCurrentPage] = useState(1)
   const productsPerPage = 8
   const { data: category } = useCategory()
+  const [sortOption, setSortOption] = useState("default");
 
   useEffect(() => {
     if (data?.products) {
       const startIndex = (currentPage - 1) * productsPerPage
       const endIndex = startIndex + productsPerPage
-      setProductsToShow(data.products.slice(startIndex, endIndex)) // Giới hạn sản phẩm theo trang
+      setProductsToShow(data.products.slice(startIndex, endIndex))
     }
-  }, [data, currentPage]) // Dependency: Cập nhật khi data hoặc currentPage thay đổi
+  }, [data, currentPage])
 
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber) // Chuyển đến trang được chọn
+    setCurrentPage(pageNumber)
   }
 
-  const totalPages = Math.ceil(data?.products?.length / productsPerPage) // Tính tổng số trang
+  useEffect(() => {
+    if (data?.products) {
+      let sortedProducts = [...data.products];
+      
+      // Sắp xếp theo các tùy chọn
+      switch (sortOption) {
+        case "price-asc":
+          sortedProducts.sort((a, b) => a.salePrice - b.salePrice);
+          break;
+        case "price-desc":
+          sortedProducts.sort((a, b) => b.salePrice - a.salePrice);
+          break;
+        case "name-asc":
+          sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case "name-desc":
+          sortedProducts.sort((a, b) => b.name.localeCompare(a.name));
+          break;
+        default:
+          // Giữ nguyên thứ tự mặc định
+          break;
+      }
+      
+      const startIndex = (currentPage - 1) * productsPerPage;
+      const endIndex = startIndex + productsPerPage;
+      setProductsToShow(sortedProducts.slice(startIndex, endIndex));
+    }
+  }, [data, currentPage, sortOption]);
+
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
+    setCurrentPage(1); // Reset về trang 1 khi thay đổi sắp xếp
+  };
+
+  const totalPages = Math.ceil(data?.products?.length / productsPerPage)
   const handleAddToCart = (product: Product) => {
     if (!product || !product._id) {
       console.error("Product is undefined or missing _id")
@@ -103,13 +143,7 @@ const ProductPage = ({
   return (
     <div className="container mx-auto p-4 space-y-5">
       <p className="text-2xl font-bold ">{t("productPage.category")}</p>
-      <div className="flex justify-center space-x-10">
-        {category?.categories?.map((category) => (
-          <Link to={`category/${category.name}`}>
-            <CategoryComponent name={category.name} />
-          </Link>
-        ))}
-      </div>
+      <CategorySlider categories={category?.categories} />
       <BannerSlide />
       <div className="flex space-x-2 mb-2">
         <div className="w-3 h-7 bg-red-700 rounded-[5px]"></div>
@@ -118,6 +152,7 @@ const ProductPage = ({
         </p>
       </div>
       <h2 className="text-2xl font-bold mb-12 text-green-500">{t("productPage.explore")}</h2>
+      <Sort handleSortChange={handleSortChange} sortOption={sortOption}/>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
         {productsToShow.map((product) => (
           <div
@@ -176,5 +211,50 @@ const ProductPage = ({
   )
 }
 
+const CategorySlider = ({ categories }) => {
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 7,
+    slidesToScroll: 1,
+    arrows: true,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    centerMode: true, // Optional: Set to true if you want centered slides
+    variableWidth: false, // Ensure consistent width for slides
+    slidesPerRow: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+  return (
+    <div className="p-2">
+      <Slider {...settings}>
+        {categories?.map((category) => (
+          <div key={category.name} className="px-12">
+            <Link to={`category/${category.name}`} className="block">
+              <CategoryComponent name={category.name} />
+            </Link>
+          </div>
+        ))}
+      </Slider>
+    </div>
+  );
+};
 
 export default ProductPage

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import SidebarAdmin from "../sidebar/sideBarAdmin"
 import {
   Table,
@@ -21,7 +21,36 @@ const OrderPage: React.FC = () => {
   const queryClient = useQueryClient()
   const { id } = useParams<{ id: number }>()
   const { data } = useOrder()
+  const [selectedOrder, setSelectedOrder] = useState<any>(null) // state cho sản phẩm được chọn
+  const [searchQuery, setSearchQuery] = useState("") // state cho tìm kiếm
+  const [currentPage, setCurrentPage] = useState(1)
+  const ordersPerPage = 6
 
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchQuery])
+
+  const filteredOrders = data?.orders.filter((order) =>
+    order.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  const indexOfLastOrder = currentPage * ordersPerPage
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage
+  const currentOrders = filteredOrders?.slice(
+    indexOfFirstOrder,
+    indexOfLastOrder
+  )
+
+  // Tính tổng số trang
+  const totalPages = Math.ceil(
+    (filteredOrders?.length || 0) / ordersPerPage
+  )
+
+  const handlePageChange = (pageNumber: number) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber)
+    }
+  }
     const mutation = useMutation({
       mutationFn: editStatus,
       onSuccess: () => {
@@ -78,7 +107,7 @@ const OrderPage: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data?.orders.map((order) => (
+                {currentOrders?.map((order) => (
                   <TableRow key={order._id}>
                     <TableCell className="border border-gray-300 p-2">
                       {order._id}
@@ -105,6 +134,7 @@ const OrderPage: React.FC = () => {
                           className="flex space-x-3 items-center"
                         >
                           <img
+                            crossorigin="anonymous | use-credentials"
                             className="w-10 h-10"
                             src={product.productImage}
                             alt=""
@@ -159,6 +189,38 @@ const OrderPage: React.FC = () => {
           </TableContainer>
         </div>
       </div>
+      {/* Phân trang */}
+      <div className="flex justify-center mt-6">
+            <div className="flex space-x-2 z-auto">
+              <Button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                variant="contained"
+              >
+                Previous
+              </Button>
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+                (pageNumber) => (
+                  <Button
+                    key={pageNumber}
+                    onClick={() => handlePageChange(pageNumber)}
+                    variant={
+                      currentPage === pageNumber ? "contained" : "outlined"
+                    }
+                  >
+                    {pageNumber}
+                  </Button>
+                )
+              )}
+              <Button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                variant="contained"
+              >
+                Next
+              </Button>
+            </div>
+          </div>
     </div>
   )
 }
