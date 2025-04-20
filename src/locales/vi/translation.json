@@ -35,11 +35,57 @@
     "ourProduct": "Sản phẩm của chúng tôi",
     "explore": "Trái ngon hôm nay",
     "stock": "Kho:",
-    "addToCart": "Thêm vào giỏ hàng"
+    "addToCart": "Thêm vào giỏ hàng",
+    "relateProduct":"Sản phẩm liên quan"
   },
   "common": {
     "addedToCartSuccess": "🛒 Sản phẩm đã được thêm vào giỏ hàng!",
     "loading": "Đang tải...",
     "error": "Đã xảy ra lỗi. Vui lòng thử lại."
-  }
+  },
+  "exclusive": {
+      "subscribe": "Đăng ký",
+      "title": "Độc quyền",
+      "description": "Nhận 10% giảm giá cho đơn hàng đầu tiên của bạn",
+      "input_placeholder": "Nhập email của bạn",
+      "button_text": "→"
+    },
+    "supports": {
+      "title": "Hỗ trợ",
+      "address": "111 Bijoy sarani, Dhaka, DH 1515, Bangladesh.",
+      "email": "exclusive@gmail.com",
+      "phone": "+88015-88888-9999"
+    },
+    "account": {
+      "title": "Tài khoản",
+      "links": [
+        "Tài khoản của tôi",
+        "Đăng nhập / Đăng ký",
+        "Giỏ hàng",
+        "Danh sách yêu thích",
+        "Cửa hàng"
+      ]
+    },
+    "quick_link": {
+      "title": "Liên kết nhanh",
+      "links": [
+        "Chính sách bảo mật",
+        "Điều khoản sử dụng",
+        "Câu hỏi thường gặp",
+        "Liên hệ"
+      ]
+    },
+    "download_app": {
+      "title": "Tải ứng dụng",
+      "description": "Tiết kiệm $3 với ứng dụng - Chỉ dành cho người dùng mới",
+      "copyright": "© Bản quyền Rimel 2022. Mọi quyền được bảo lưu."
+    },
+    "sort":{
+      "Sort": "Sắp xếp theo: ",
+      "links": [
+        "Mặc định",
+        "Thấp đến cao",
+        "Cao đến thấp"
+      ]
+    }
 }

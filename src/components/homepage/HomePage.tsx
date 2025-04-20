@@ -12,6 +12,55 @@ import "slick-carousel/slick/slick-theme.css";
 import BannerSlide from "../rating/BannerSlide"
 import CategoryComponent from "../sidebar/categoryComponent"
 import Sort from "../sidebar/sortComponent"
+import dayjs from "dayjs"
+
+
+function NewProductsComponent({products, handleAddToCart}){
+  const {t} = useTranslation()
+  const today = dayjs()
+  const newProducts = products?.filter(product => dayjs(product.createdAt).isAfter(today.subtract(7, "day")))
+  return(
+    <div className="flex space-x-2 mb-2">
+      <section>
+        <h2 className="text-2xl font-bold mb-5 text-red-500">🆕 Sản phẩm mới</h2>
+        <div className="grid grid-cols-6 gap-4">
+          {newProducts?.map(product => (
+            <div
+            key={product._id}
+            className="bg-white p-3 border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+          >
+            <div className="aspect-w-1 aspect-h-1 w-full">
+              <img
+                crossOrigin="anonymous"
+                src={product.images[0]}
+                alt={product.name}
+                className="w-full h-full md:h-48 object-cover"
+              />
+            </div>
+              <p className="text-sm text-gray-500">{product.brand}</p>
+              <Link to={`/productdetail/${product._id}`}>
+                <h3 className="text-lg font-semibold text-gray-800 hover:text-orange-500 transition">
+                  {product.name}
+                </h3>
+              </Link>
+              <p className="text-xl font-bold text-gray-900 mt-1">
+                {product.salePrice.toLocaleString()}₫
+              </p>
+              <div className="mt-3 flex justify-center max-w-md mx-auto">
+                <button
+                    onClick={() => handleAddToCart(product)}
+                    className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md text-sm sm:text-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white active:bg-orange-700 active:scale-95"
+                >
+                    {t("productPage.addToCart")}
+                </button>
+              </div>
+          </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  )
+}
 
 
 function SupportSection() {
@@ -60,7 +109,7 @@ const ProductPage = ({
   const { t } = useTranslation()
   const [productsToShow, setProductsToShow] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
-  const productsPerPage = 8
+  const productsPerPage = 12
   const { data: category } = useCategory()
   const [sortOption, setSortOption] = useState("default");
 
@@ -151,6 +200,7 @@ const ProductPage = ({
           {t("productPage.ourProduct")}
         </p>
       </div>
+      <NewProductsComponent products={data?.products} handleAddToCart={handleAddToCart} />
       <h2 className="text-2xl font-bold mb-12 text-green-500">{t("productPage.explore")}</h2>
       <Sort handleSortChange={handleSortChange} sortOption={sortOption}/>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
@@ -159,12 +209,12 @@ const ProductPage = ({
             key={product._id}
             className="bg-white p-3 border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
           >
-            <div className="relative">
+            <div className="aspect-w-1 aspect-h-1 w-full">
               <img
-                crossorigin="anonymous | use-credentials"
+                crossOrigin="anonymous"
                 src={product.images[0]}
                 alt={product.name}
-                className="w-full h-48 object-cover"
+                className="w-full h-full md:h-48 object-cover"
               />
             </div>
               <p className="text-sm text-gray-500">{product.brand}</p>
@@ -176,12 +226,12 @@ const ProductPage = ({
               <p className="text-xl font-bold text-gray-900 mt-1">
                 {product.salePrice.toLocaleString()}₫
               </p>
-              <div className="mt-3 flex justify-center">
+              <div className="mt-3 flex justify-center max-w-md mx-auto">
                 <button
-                  onClick={() => handleAddToCart(product)}
-                  className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md text-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white"
+                    onClick={() => handleAddToCart(product)}
+                    className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md text-sm sm:text-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white active:bg-orange-700 active:scale-95"
                 >
-                  {t("productPage.addToCart")}
+                    {t("productPage.addToCart")}
                 </button>
               </div>
           </div>

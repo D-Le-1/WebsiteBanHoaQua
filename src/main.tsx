@@ -13,9 +13,8 @@ createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
     <Layout>
-    <ToastContainer position="top-right" autoClose={3000} />
+    <ToastContainer position="top-right" autoClose={2500} />
         <Router />
-    
     </Layout>
     </QueryClientProvider>
   </React.StrictMode>

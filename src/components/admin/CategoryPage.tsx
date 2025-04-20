@@ -12,18 +12,38 @@ import {
   Button,
   Stack
 } from "@mui/material"
-import { addCategory, deleteCategory } from "../../useQuery/api/api"
+import { addCategory, deleteCategory, editCategory } from "../../useQuery/api/api"
 import { toast } from "react-toastify"
 import { useState } from "react"
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded"
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded"
 import { useParams } from "react-router-dom"
 
 const CategoryPage = () => {
-  const { id } = useParams
+  const { id } = useParams()
   const queryClient = useQueryClient()
   const { data } = useCategory()
   const [openModal, setOpenModal] = useState(false)
+  const [openModalUpdate, setOpenModalUpdate] = useState(false)
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    description:""
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }) => editCategory(id, data),
+    onSuccess: () => {
+      toast.success("Sua danh mục thành công")
+      queryClient.invalidateQueries(["category"])
+      setOpenModalUpdate(false)
+    },
+    onError: () => {
+      toast.error("Không thể sua danh mục")
+    }
+  })
 
   const mutation = useMutation({
     mutationFn: (id) => deleteCategory(id),
@@ -35,6 +55,22 @@ const CategoryPage = () => {
       toast.error("Không thể xóa danh mục")
     }
   })
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const updateHandle = (id) => {
+    const payload = new FormData();
+    payload.append("name", formData.name);
+    payload.append("description", formData.description);
+    updateMutation.mutate({ id: selectedCategoryId , data: payload });
+  };
+  
 
   const deleteHandle = (id: string) => {
     mutation.mutate(id)
@@ -51,6 +87,7 @@ const CategoryPage = () => {
               onClick={() => setOpenModal(true)}
               variant="contained"
               color="primary"
+              startIcon={<AddCircleRoundedIcon/>}
             >
               Add Category
             </Button>
@@ -80,20 +117,35 @@ const CategoryPage = () => {
                     <TableCell className="border border-gray-300 p-2">
                       {category.description}
                     </TableCell>
-                    <TableCell className="border space-x-5 border-gray-300 p-2">
-                      <Button
-                        variant="outlined"
-                        startIcon={<CloseRoundedIcon />}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        onClick={() => deleteHandle(category._id)}
-                        variant="contained"
-                        startIcon={<CloseRoundedIcon />}
-                      >
-                        Delete
-                      </Button>
+                    <TableCell className="border border-gray-300 p-2">
+                      <Stack
+                          className="mt-5"
+                          direction="row"
+                          alignItems="center"
+                          spacing={2}
+                        >
+                        <Button
+                          onClick={() => {
+                            setFormData({
+                              name: category.name,
+                              description: category.description
+                            });
+                            setSelectedCategoryId(category._id);
+                            setOpenModalUpdate(true);
+                          }}
+                          variant="outlined"
+                          startIcon={<EditIcon />}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          onClick={() => deleteHandle(category._id)}
+                          variant="contained"
+                          startIcon={<CloseRoundedIcon />}
+                        >
+                          Delete
+                        </Button>
+                      </Stack>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -101,6 +153,50 @@ const CategoryPage = () => {
             </Table>
           </TableContainer>
         </div>
+        {openModalUpdate && (
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg w-1/3">
+            <h2 className="text-xl font-bold mb-4">Thêm Danh Mục</h2>
+            <label className="block mb-2">
+              Tên danh mục: <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+            />
+    
+            <label className="block mb-2 mt-2">
+              Mô tả: <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+            />
+            <Stack className="mt-5" direction="row" spacing={2}>
+              <Button
+                onClick={() => setOpenModalUpdate(false)}
+                variant="outlined"
+                startIcon={<CloseRoundedIcon />}
+              >
+                Hủy
+              </Button>
+              <Button
+                onClick={() => updateHandle()}
+                variant="contained"
+                startIcon={<SaveIcon />}
+              >
+                Edit
+              </Button>
+            </Stack>
+          </div>
+        </div>
+        )}
       </div>
     </div>
   )

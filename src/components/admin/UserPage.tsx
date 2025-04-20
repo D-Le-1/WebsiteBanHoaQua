@@ -14,6 +14,7 @@ import {
   Button,
   Stack
 } from "@mui/material"
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import { toast } from "react-toastify"
 import { useQueryClient } from "@tanstack/react-query"
 
@@ -108,7 +109,7 @@ const UserPage = () => {
                       {user.role}
                     </TableCell>
                     <TableCell className="border border-gray-300 p-2 text-center">
-                      {(role.role === "admin") && (
+                      {(role?.role === "admin") && (
                           <div className="flex items-center justify-center space-x-2">
                             <Button
                                 onClick={
@@ -116,6 +117,7 @@ const UserPage = () => {
                                 }
                                 variant="contained"
                                 className="transition-transform transform hover:scale-105"
+                                startIcon={<ChangeCircleIcon/>}
                             >
                                 Change
                             </Button>

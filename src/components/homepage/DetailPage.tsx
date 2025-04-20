@@ -9,20 +9,27 @@ import { useParams } from "react-router-dom"
 import { Product } from "../../useQuery/user/auth"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
+import { useProduct } from "../../useQuery/hooks/useProduct"
+import { Link } from "react-router-dom"
 
 const DetailPage = () => {
   const { id } = useParams<{ id: string }>()
   const { data } = useProductDetail(id)
   const [rating, setRating] = useState(4)
   const [quantity, setQuantity] = useState(1)
+  const {data: relateProduct} = useProduct()
   const [selectedImage, setSelectedImage] = useState(null)
+
+  useEffect(() => {
+    if (data?.product) {
+      setSelectedImage(data.product.images[0])
+    }
+  }, [data?.product])
+
   if (!data) {
     return <></>
   }
-  if (selectedImage === null) {
-    setSelectedImage(data.product.images[0])
-  }
-
+  
   const handleAddToCart = (product: Product) => {
     const newItem: CartItem = { product, quantity: 1 }
 
@@ -56,7 +63,7 @@ const DetailPage = () => {
       <div className="flex flex-col gap-4 space-x-10 md:flex-row md:gap-10 lg:justify-center px-4">
           <div className="flex flex-col overflow-x-auto gap-2 md:flex-col">
             <img
-              crossorigin="anonymous"
+              crossOrigin="anonymous"
               className="w-[1200px] h-96 object-cover rounded-lg shadow-md bg-zinc-100"
               src={selectedImage}
               alt="Selected"
@@ -127,8 +134,41 @@ const DetailPage = () => {
           </div>
         </div>
       </div>
+      <RelateProduct product={data.product}/>
     </div>
   )
+}
+
+function RelateProduct({ product }) {
+  const {t} = useTranslation()
+  const { data: relateProduct } = useProduct(); // tất cả sản phẩm
+
+  const relatedProducts = relateProduct?.products?.filter(
+    (p) => p.categoryName === product.categoryName && p._id !== product._id
+  );
+  return (
+    <section className="mt-10">
+      <h2 className="text-2xl font-bold text-orange-500 mb-5">{t("productPage.relateProduct")}</h2>
+      <div className="grid grid-cols-4 gap-4">
+        {relatedProducts?.map((p) => (
+          <Link
+            key={p._id}
+            to={`/productdetail/${p._id}`}
+            className="bg-white p-3 border rounded-lg shadow hover:shadow-lg transition"
+          >
+            <img
+              crossOrigin="anonymous"
+              src={p.images[0]}
+              alt={p.name}
+              className="h-40 w-full object-cover rounded"
+            />
+            <h3 className="mt-2 text-md font-semibold text-gray-800">{p.name}</h3>
+            <p className="text-red-600 font-bold">{p.salePrice.toLocaleString()}₫</p>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
 }
 
 export default DetailPage

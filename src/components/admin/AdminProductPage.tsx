@@ -46,7 +46,6 @@ const AdminProductPage: React.FC = () => {
     indexOfLastProduct
   )
 
-  // Tính tổng số trang
   const totalPages = Math.ceil(
     (filteredProducts?.length || 0) / productsPerPage
   )
@@ -70,7 +69,6 @@ const AdminProductPage: React.FC = () => {
     mutation.mutate(productId)
   }
 
-  console.log(data)
   return (
     <div className="p-6">
       <div className="flex space-x-10">
@@ -119,6 +117,9 @@ const AdminProductPage: React.FC = () => {
                     Stock
                   </TableCell>
                   <TableCell className="border border-gray-300 p-2">
+                    Sold
+                  </TableCell>
+                  <TableCell className="border border-gray-300 p-2">
                     Brand
                   </TableCell>
                   <TableCell className="border border-gray-300 p-2">
@@ -155,6 +156,9 @@ const AdminProductPage: React.FC = () => {
                     </TableCell>
                     <TableCell className="border border-gray-300 p-2">
                       {product.stock}
+                    </TableCell>
+                    <TableCell className="border border-gray-300 p-2">
+                      {product.sold}
                     </TableCell>
                     <TableCell className="border border-gray-300 p-2">
                       {product.brand}

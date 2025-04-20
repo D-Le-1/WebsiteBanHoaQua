@@ -89,7 +89,7 @@ function Search() {
         <div className="relative">
           <div className="hidden md:flex items-center space-x-3">
             <img
-              crossorigin="anonymous | use-credentials"
+              crossOrigin="anonymous | use-credentials"
               className="w-10 h-10 rounded-full object-cover"
               src={user?.avatar}
               alt=""
@@ -142,7 +142,7 @@ function Search() {
       <div className="flex md:hidden items-center">
         <button onClick={() => setDropdownOpenMb(!dropdownOpenMb)}>
           <img
-            crossorigin="anonymous | use-credentials"
+            crossOrigin="anonymous | use-credentials"
             className="w-10 h-10 rounded-full object-cover"
             src={user?.avatar}
             alt=""
@@ -307,7 +307,6 @@ const Header: React.FC = () => {
             className="text-2xl justify-center items-center flex ml-16"
           >
             <img
-              crossorigin="anonymous"
               className="w-16 h-16"
               src="images\LogoShop.png"
               alt="logo"

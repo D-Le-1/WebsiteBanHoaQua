@@ -76,14 +76,6 @@ export const CityPick = async () => {
 
 export const updateProduct = async (productId, formData) => {
   try {
-    console.log("Sending update request for product ID:", productId)
-    if (typeof productId !== "string") {
-      throw new Error("productId must be a string")
-    }
-    console.log("Payload:")
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value instanceof File ? value.name : value}`)
-    }
     const response = await axios.put(
       `http://localhost:8000/api/products/${productId}`,
       formData,
@@ -91,7 +83,6 @@ export const updateProduct = async (productId, formData) => {
         headers: { "Content-Type": "multipart/form-data" }
       }
     )
-    console.log("API response:", response.data)
     return response.data
   } catch (error) {
     console.error("API error:", error.response?.data || error.message)
@@ -314,3 +305,13 @@ export const paymentVnpay = async (payload) => {
   }
 };
 
+export const editCategory = async(categoryId, formData) => {
+  const response = await axios.put(`http://localhost:8000/api/categories/${categoryId}`, formData, 
+    {
+      headers:{
+        "Content-Type": "application/json"
+      }
+    }
+  )
+  return response.data
+}
