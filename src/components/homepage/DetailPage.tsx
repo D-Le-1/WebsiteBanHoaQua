@@ -1,3 +1,4 @@
+// DetailPage.jsx - Fixing review system integration
 import React, { useState, useEffect } from "react"
 import Rating from "../rating/Rating"
 import ColorPicker from "../rating/pickColor"
@@ -11,14 +12,27 @@ import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import { useProduct } from "../../useQuery/hooks/useProduct"
 import { Link } from "react-router-dom"
+import ReviewSystem from "../rating/reviewComponent"
+import { useGetListReview } from "../../useQuery/hooks/useGetListReview"
 
 const DetailPage = () => {
   const { id } = useParams<{ id: string }>()
-  const { data } = useProductDetail(id)
-  const [rating, setRating] = useState(4)
+  const { data, isLoading, isError, error } = useProductDetail(id)
+  const [user, setUser] = useState(null)
+  const { 
+    data: reviewData, 
+    isLoading: isReviewsLoading, 
+    isError: isReviewsError 
+  } = useGetListReview(id)
   const [quantity, setQuantity] = useState(1)
   const {data: relateProduct} = useProduct()
   const [selectedImage, setSelectedImage] = useState(null)
+
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem("user") || "null");
+    console.log("Saved User:", savedUser);
+    setUser(savedUser);
+  }, []);
 
   useEffect(() => {
     if (data?.product) {
@@ -26,12 +40,8 @@ const DetailPage = () => {
     }
   }, [data?.product])
 
-  if (!data) {
-    return <></>
-  }
-  
-  const handleAddToCart = (product: Product) => {
-    const newItem: CartItem = { product, quantity: 1 }
+  const handleAddToCart = (product) => {
+    const newItem = { product, quantity }
 
     const existingCart = JSON.parse(localStorage.getItem("cart") || "[]")
 
@@ -53,6 +63,25 @@ const DetailPage = () => {
     })
   }
 
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          {error?.message || 'Không thể tải thông tin sản phẩm. Vui lòng thử lại sau.'}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-10 sm:flex-col">
       <div className="space-x-2">
@@ -71,7 +100,7 @@ const DetailPage = () => {
             <div className="flex flex-row overflow-x-auto gap-2 mt-4 justify-center">
               {data?.product.images.map((img, index) => (
                 <img
-                  crossorigin="anonymous"
+                  crossOrigin="anonymous"
                   key={index}
                   src={img}
                   alt={`Thumbnail ${index}`}
@@ -85,18 +114,15 @@ const DetailPage = () => {
         </div>
         <div className="w-full md:max-w-96 space-y-3">
           <h1 className="font-bold text-lg">{data.product.name}</h1>
-          <Rating
-            rating={rating}
-            onRatingChange={setRating}
-            data={data.product.stock}
-          />
           <p className="font-semibold text-lg">{data.product.salePrice}₫</p>
+          <p className="font-bold text-green-500 text-lg">Hiện còn: {data.product.stock}</p>
           <div className="border-b-black border-b">
             <p className="text-sm line-clamp-4">{data.product.description}</p>
           </div>
           <div className="flex gap-4 flex-wrap">
             <QuantitySelector
               quantity={quantity}
+              stock={data.product.stock}
               onQuantityChange={setQuantity}
             />
             {data.product && (
@@ -134,6 +160,13 @@ const DetailPage = () => {
           </div>
         </div>
       </div>
+      {/* Pass the review data correctly to ReviewSystem */}
+      <ReviewSystem 
+        productId={data.product._id} 
+        userId={user ? user.userId : null} 
+        userName={user ? user.name : "Guest"} 
+        reviewList={reviewData} 
+      />
       <RelateProduct product={data.product}/>
     </div>
   )

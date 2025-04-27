@@ -14,21 +14,63 @@ import CategoryComponent from "../sidebar/categoryComponent"
 import Sort from "../sidebar/sortComponent"
 import dayjs from "dayjs"
 
+const Card = () => {
+  const cardsData = [
+    {
+      title: "Hoa chất lượng",
+      description: "Được kiểm định rõ ràng",
+      bgImage: "https://hoatuoi360.vn/upload/hinhanh/hoa-de-ban-05_-hoa-tuoi-360217.png",
+    },
+    {
+      title: "Thực phẩm sạch",
+      description: "Quy trình sản xuất kín",
+      bgImage: "https://defarm.vn/wp-content/uploads/2021/07/Thuc-Pham-Duoc-Xep-Loai-Tieu-Chuan.jpg",
+    },
+    {
+      title: "Trái cây tươi",
+      description: "Nhập khẩu & trong nước",
+      bgImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTx5aRpfuFisb1TYIRIRdBg3mN5p5VJMNnIDA&s",
+    },
+  ];
+  return (
+    <div className="container flex flex-col md:flex-row justify-center gap-4 p-4 bg-gray-100">
+      {cardsData.map((card, index) => (
+        <div className="w-full md:w-96 h-48 rounded-lg shadow-lg flex flex-col justify-center items-center text-center text-white p-4 relative overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center transition-all duration-500 ease-in-out hover:bg-[length:150%]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${card.bgImage})`,
+            border: "2px solid #34C759",
+          }}
+        />
+        <div className="relative z-10">
+          <h2 className="text-xl md:text-2xl font-bold mb-2">{card.title}</h2>
+          <p className="text-sm">{card.description}</p>
+        </div>
+      </div>
+      ))}      
+    </div>
+  );
+};
+
 
 function NewProductsComponent({products, handleAddToCart}){
   const {t} = useTranslation()
   const today = dayjs()
   const newProducts = products?.filter(product => dayjs(product.createdAt).isAfter(today.subtract(7, "day")))
   return(
-    <div className="flex space-x-2 mb-2">
+    <div className="container flex space-x-2 mb-2">
       <section>
         <h2 className="text-2xl font-bold mb-5 text-red-500">🆕 Sản phẩm mới</h2>
-        <div className="grid grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
           {newProducts?.map(product => (
             <div
             key={product._id}
-            className="bg-white p-3 border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+            className="bg-white p-3 border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 relative"
           >
+            <div className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 text-xs font-bold z-10 rounded-bl-lg">
+              NEW
+            </div>
             <div className="aspect-w-1 aspect-h-1 w-full">
               <img
                 crossOrigin="anonymous"
@@ -37,7 +79,7 @@ function NewProductsComponent({products, handleAddToCart}){
                 className="w-full h-full md:h-48 object-cover"
               />
             </div>
-              <p className="text-sm text-gray-500">{product.brand}</p>
+              <p className="text-sm text-gray-500">{product.brand} || {Math.round(product.averageRating)}/5</p>
               <Link to={`/productdetail/${product._id}`}>
                 <h3 className="text-lg font-semibold text-gray-800 hover:text-orange-500 transition">
                   {product.name}
@@ -189,11 +231,20 @@ const ProductPage = ({
     })
   }
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto p-4 space-y-5">
       <p className="text-2xl font-bold ">{t("productPage.category")}</p>
       <CategorySlider categories={category?.categories} />
       <BannerSlide />
+      <Card/>
       <div className="flex space-x-2 mb-2">
         <div className="w-3 h-7 bg-red-700 rounded-[5px]"></div>
         <p className="content-center text-sm text-red-600">
@@ -217,7 +268,7 @@ const ProductPage = ({
                 className="w-full h-full md:h-48 object-cover"
               />
             </div>
-              <p className="text-sm text-gray-500">{product.brand}</p>
+              <p className="text-sm text-gray-500">{product.brand} | {Math.round(product.averageRating)}/5</p>
               <Link to={`/productdetail/${product._id}`}>
                 <h3 className="text-lg font-semibold text-gray-800 hover:text-orange-500 transition">
                   {product.name}
@@ -256,6 +307,7 @@ const ProductPage = ({
           )}
         </div>
       </div>
+      <BestSellingProducts products={data?.products}/>
       <SupportSection />
     </div>
   )
@@ -306,5 +358,57 @@ const CategorySlider = ({ categories }) => {
     </div>
   );
 };
+
+function BestSellingProducts({ products }) {
+  const { t } = useTranslation()
+
+  const bestSelling = [...(products || [])]
+    .sort((a, b) => b.sold - a.sold)
+    .slice(0, 8) 
+
+  return (
+    <div className="flex space-x-2 mb-2">
+      <section>
+        <h2 className="text-2xl font-bold mb-5 text-red-500">🔥 {t("productPage.bestSeller")}</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          {bestSelling?.map(product => (
+            <div
+            key={product._id}
+            className="bg-white p-3 border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+          >
+            <div className="aspect-w-1 aspect-h-1 w-full">
+              <img
+                crossOrigin="anonymous"
+                src={product.images[0]}
+                alt={product.name}
+                className="w-full h-full md:h-48 object-cover"
+              />
+            </div>
+              <p className="text-sm text-gray-500">{product.brand} || {Math.round(product.averageRating)}/5</p>
+              <Link to={`/productdetail/${product._id}`}>
+                <h3 className="text-lg font-semibold text-gray-800 hover:text-orange-500 transition">
+                  {product.name}
+                </h3>
+              </Link>
+              <p className="text-xl font-bold text-gray-900 mt-1">
+                {product.salePrice.toLocaleString()}₫
+              </p>
+              <p className="text-sm text-gray-500">{t("productPage.sold")}: {product.sold}</p>
+              <div className="mt-3 flex justify-center max-w-md mx-auto">
+                <button
+                    onClick={() => handleAddToCart(product)}
+                    className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md text-sm sm:text-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white active:bg-orange-700 active:scale-95"
+                >
+                    {t("productPage.addToCart")}
+                </button>
+              </div>
+          </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  )
+}
+
 
 export default ProductPage

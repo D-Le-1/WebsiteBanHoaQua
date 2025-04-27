@@ -126,6 +126,9 @@ const AdminProductPage: React.FC = () => {
                     Category
                   </TableCell>
                   <TableCell className="border border-gray-300 p-2">
+                    Rating
+                  </TableCell>
+                  <TableCell className="border border-gray-300 p-2">
                     Actions
                   </TableCell>
                 </TableRow>
@@ -140,7 +143,7 @@ const AdminProductPage: React.FC = () => {
                       <img
                         crossorigin="anonymous | use-credentials"
                         src={product.images[0]}
-                        className="w-20 h-20"
+                        className="w-16 h-16 object-cover rounded-md"
                         alt=""
                       />
                       <p>{product.name}</p>
@@ -165,6 +168,9 @@ const AdminProductPage: React.FC = () => {
                     </TableCell>
                     <TableCell className="border border-gray-300 p-2">
                       {product.categoryName}
+                    </TableCell>
+                    <TableCell className="border border-gray-300 p-2">
+                      {Math.round(product.averageRating)}
                     </TableCell>
                     <TableCell className="border border-gray-300 p-2">
                       <Stack

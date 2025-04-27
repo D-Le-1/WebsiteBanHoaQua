@@ -7,13 +7,25 @@ import {
   Order
 } from "../user/auth"
 
+// axios.interceptors.request.use((config) => {
+//   config.headers["ngrok-skip-browser-warning"] = "true";
+//   const token = localStorage.getItem("token");
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
+
+const API_BASE_URL = "http://localhost:8000/api";
+// const API_BASE_URL = "https://a873-116-101-151-64.ngrok-free.app/api"
+
 export const fetchProducts = async () => {
-  const response = await axios.get("http://localhost:8000/api/products")
+  const response = await axios.get(`${API_BASE_URL}/products`)
   return response.data
 }
 
 export const fetchProductDetail = async (id: string) => {
-  const response = await axios.get(`http://localhost:8000/api/products/${id}`)
+  const response = await axios.get(`${API_BASE_URL}/products/${id}`)
   return response.data
 }
 
@@ -21,7 +33,7 @@ export const registerUser = async (
   credentials: RegisterCredentials
 ): Promise<AuthResponse> => {
   const response = await axios.post<AuthResponse>(
-    `http://localhost:8000/api/auth/signup`,
+    `${API_BASE_URL}/auth/signup`,
     credentials
   )
   return response.data
@@ -29,7 +41,7 @@ export const registerUser = async (
 
 export const loginUser = async (credential: LoginCredentials) => {
   const response = await axios.post(
-    `http://localhost:8000/api/auth/signin`,
+    `${API_BASE_URL}/auth/signin`,
     credential
   )
   return response.data
@@ -37,7 +49,7 @@ export const loginUser = async (credential: LoginCredentials) => {
 
 export const logoutUser = async () => {
   const token = localStorage.getItem("token")
-  const response = await axios.post(`http://localhost:8000/api/auth/signout`, {
+  const response = await axios.post(`${API_BASE_URL}/auth/signout`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -48,7 +60,7 @@ export const createOrders = async (orderData: Order) => {
   try {
     const token = localStorage.getItem("token")
     const response = await axios.post(
-      `http://localhost:8000/api/orders/create`,
+      `${API_BASE_URL}/orders/create`,
       orderData,
       {
         headers: {
@@ -77,7 +89,7 @@ export const CityPick = async () => {
 export const updateProduct = async (productId, formData) => {
   try {
     const response = await axios.put(
-      `http://localhost:8000/api/products/${productId}`,
+      `${API_BASE_URL}/products/${productId}`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" }
@@ -91,7 +103,7 @@ export const updateProduct = async (productId, formData) => {
 }
 
 export const createProduct = async (formData) => {
-  const res = await axios.post("http://localhost:8000/api/products", formData, {
+  const res = await axios.post(`${API_BASE_URL}/products`, formData, {
     headers: {
       "Content-Type": "multipart/form-data" // ❗ Rất quan trọng
     }
@@ -103,7 +115,7 @@ export const listOrder = async () => {
   try {
     const token = localStorage.getItem("token")
 
-    const response = await axios.get("http://localhost:8000/api/orders/", {
+    const response = await axios.get(`${API_BASE_URL}/orders/`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -116,7 +128,7 @@ export const listOrder = async () => {
 
 export const editStatus = async ({ id, newStatus }) => {
   const response = await axios.patch(
-    `http://localhost:8000/api/orders/${id}/status`,
+    `${API_BASE_URL}/orders/${id}/status`,
     { status: newStatus },
     {
       headers: {
@@ -130,7 +142,7 @@ export const editStatus = async ({ id, newStatus }) => {
 export const searchName = async ({ name }) => {
   try {
     const response = await axios.get(
-      `http://localhost:8000/api/products/search?q=${name}`
+      `${API_BASE_URL}/products/search?q=${name}`
     )
     return response.data
   } catch (error) {
@@ -140,7 +152,7 @@ export const searchName = async ({ name }) => {
 
 export const listCategory = async () => {
   try {
-    const response = await axios.get(`http://localhost:8000/api/categories`)
+    const response = await axios.get(`${API_BASE_URL}/categories`)
     return response.data
   } catch (error) {
     return []
@@ -149,7 +161,7 @@ export const listCategory = async () => {
 
 export const listUser = async () => {
   try {
-    const response = await axios.get(`http://localhost:8000/api/auth/user`)
+    const response = await axios.get(`${API_BASE_URL}/auth/user`)
     return response.data
   } catch (error) {
     return []
@@ -158,7 +170,7 @@ export const listUser = async () => {
 
 export const deleteProduct = async (productId: string) => {
   const response = await axios.delete(
-    `http://localhost:8000/api/products/${productId}`
+    `${API_BASE_URL}/products/${productId}`
   )
   return response.data
 }
@@ -168,7 +180,7 @@ export const getOrderUser = async () => {
   const email = userStr ? JSON.parse(userStr).email : null
   const token = localStorage.getItem("token")
   const response = await axios.get(
-    `http://localhost:8000/api/orders/email?email=${email}`,
+    `${API_BASE_URL}/orders/email?email=${email}`,
     {
       headers: {
         Authorization: `Bearer ${token}`
@@ -178,14 +190,26 @@ export const getOrderUser = async () => {
   return response.data
 }
 
+export const getOrderDetail = async({id}) => {
+  const token = localStorage.getItem("token")
+  const response = await axios.get(`${API_BASE_URL}/orders/${id}`,{
+    headers:{
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return response.data
+}
+
+
+
 export const getlistCoupon = async () => {
-  const response = await axios.get(`http://localhost:8000/api/coupons`)
+  const response = await axios.get(`${API_BASE_URL}/coupons`)
   return response.data
 }
 
 export const applyCoupon = async (code: string) => {
   const response = await axios.post(
-    `http://localhost:8000/api/coupons/validate`,
+    `${API_BASE_URL}/coupons/validate`,
     {
       code
     },
@@ -201,7 +225,7 @@ export const applyCoupon = async (code: string) => {
 export const editProfile = async (data) => {
   const token = localStorage.getItem("token")
   const response = await axios.patch(
-    "http://localhost:8000/api/auth/update",
+    `${API_BASE_URL}/auth/update`,
     data,
     {
       headers: {
@@ -215,7 +239,7 @@ export const editProfile = async (data) => {
 export const changeRole = async ({ userId, role }) => {
   const token = localStorage.getItem("token")
   const response = await axios.patch(
-    `http://localhost:8000/api/auth/role/${userId}`,
+    `${API_BASE_URL}/auth/role/${userId}`,
     { role },
     {
       headers: {
@@ -229,7 +253,7 @@ export const changeRole = async ({ userId, role }) => {
 
 export const addCategory = async (formData) => {
   const response = await axios.post(
-    "http://localhost:8000/api/categories",
+    `${API_BASE_URL}/categories`,
     formData,
     {
       headers: {
@@ -242,14 +266,14 @@ export const addCategory = async (formData) => {
 
 export const deleteCategory = async (id) => {
   const response = await axios.delete(
-    `http://localhost:8000/api/categories/${id}`
+    `${API_BASE_URL}/categories/${id}`
   )
   return response.data
 }
 
 export const changeStatusCoupon = async ({ id, newStatus }) => {
   const response = await axios.patch(
-    `http://localhost:8000/api/coupons/${id}`,
+    `${API_BASE_URL}/coupons/${id}`,
     { status: newStatus },
     {
       headers: {
@@ -261,13 +285,13 @@ export const changeStatusCoupon = async ({ id, newStatus }) => {
 }
 
 export const getProductByCategory = async ({categoryName}) => {
-  const response = await axios.get(`http://localhost:8000/api/products/category/${categoryName}`)
+  const response = await axios.get(`${API_BASE_URL}/products/category/${categoryName}`)
   return response.data
 }
 
 export const paymentMomo = async (payload) => {
   try { 
-    const response = await axios.post('http://localhost:8000/api/payment/momo', {
+    const response = await axios.post(`${API_BASE_URL}/payment/momo`, {
       amount: payload.amount,
       orderInfo: payload.orderInfo,
       orderData: payload.orderData // Thêm thông tin đơn hàng đầy đủ
@@ -284,7 +308,7 @@ export const paymentMomo = async (payload) => {
 
 export const paymentVnpay = async (payload) => {
   try {
-    const response = await axios.post("http://localhost:8000/api/payment/vnpay", {
+    const response = await axios.post(`${API_BASE_URL}/payment/vnpay`, {
       amount: payload.amount,
       orderInfo: {
         productName: payload.orderInfo.productName,
@@ -306,7 +330,7 @@ export const paymentVnpay = async (payload) => {
 };
 
 export const editCategory = async(categoryId, formData) => {
-  const response = await axios.put(`http://localhost:8000/api/categories/${categoryId}`, formData, 
+  const response = await axios.put(`${API_BASE_URL}/categories/${categoryId}`, formData, 
     {
       headers:{
         "Content-Type": "application/json"
@@ -315,3 +339,67 @@ export const editCategory = async(categoryId, formData) => {
   )
   return response.data
 }
+
+export const addCoupon = async(formData) => {
+  const response = await axios.post(`${API_BASE_URL}/coupons/create`, formData, {
+    headers:{
+      "Content-Type": "application/json"
+    }
+  })
+  return response.data
+}
+
+export const fetchDashboardStats = async () => {
+  const response = await axios.get(`${API_BASE_URL}/dashboard/stats`);
+  return response.data.data;
+};
+
+export const fetchProductPerformance = async () => {
+  const response = await axios.get(`${API_BASE_URL}/dashboard/products`);
+  return response.data.data;
+};
+
+//review API
+export const fetchReviews = async ({productId}) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/reviews/${productId}`);
+    console.log("Fetched reviews:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    return { reviews: [], averageRating: 0 }; // Default fallback value
+  }
+};
+
+export const addReview = async (reviewData) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/reviews`, reviewData);
+    console.log("Add Review Response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Add Review Error:", error);
+    throw error;
+  }
+};
+
+export const deleteReview = async ({ reviewId, userId }) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/reviews/${reviewId}`, {
+      data: { userId }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Delete Review Error:", error);
+    throw error;
+  }
+};
+
+export const likeReview = async (reviewId) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/reviews/${reviewId}/like`);
+    return response.data;
+  } catch (error) {
+    console.error("Like Review Error:", error);
+    throw error;
+  }
+};

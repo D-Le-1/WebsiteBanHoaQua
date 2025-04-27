@@ -1,16 +1,30 @@
-import { ReactElement } from "react"
-import Table from "../components/table/Table"
-import Header from "../components/header/header"
-import Footer from "../components/footer/Footer"
-import ChatPage from "../components/homepage/ChatPage"
+// import { ReactElement, useState, useEffect } from "react";
+// import ChatApp from "../components/homepage/ChatPage";
 
+// function Chat(): ReactElement {
+//   const [user, setUser] = useState(null);
 
-function Chat(): ReactElement {
-  return (
-    <div className="">
-        <ChatPage/>
-    </div>
-  )
-}
+//   useEffect(() => {
+//     const storedUser = localStorage.getItem("user");
+//     if (storedUser) {
+//       setUser(JSON.parse(storedUser));
+//     }
+//   }, []);
 
-export default Chat
+//   if (!user) {
+//     return <div>Loading user...</div>;
+//   }
+
+//   return (
+//     <div className="App">
+//       <ChatApp
+//         userId={user.id}
+//         role={user.role}
+//         name={user.name}
+//         avatar={user.avatar}
+//       />
+//     </div>
+//   );
+// }
+
+// export default Chat;

@@ -36,7 +36,9 @@
     "explore": "Delicious Fruit Of The Day",
     "stock": "Stock",
     "addToCart": "Add to Cart",
-    "relateProduct":"Relate products"
+    "relateProduct":"Relate products",
+    "bestSeller": "Best Seller",
+    "sold": "Sold"
   },
   "common": {
     "addedToCartSuccess": "🛒 Product has been added to your cart!",

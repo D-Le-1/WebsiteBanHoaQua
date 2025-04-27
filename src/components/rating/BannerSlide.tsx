@@ -8,34 +8,34 @@ function BannerSlide() {
   const slides = [
     {
       id: 1,
-      image: "https://fujifruit.com.vn/wp-content/uploads/2023/03/7-02.jpg",
+      image: "https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/468406482_597828942774050_7177994008916388013_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=UXDgZ9LnVvQQ7kNvwHD7ZoC&_nc_oc=Admmk73fdVnAeDd1YXHFRgqx9TUiZXYNlT9Y2Br9NeK7QjJX7dWQKziiIl83dUNvn516ef93XfVldJPbRSODNWqa&_nc_zt=23&_nc_ht=scontent.fhan14-1.fna&_nc_gid=e7qZEmjpDlzaStTkP1csyw&oh=00_AfF3jNULxxEHbuG9PX8LdXm1FNBVJeYbAC2mBUt79TEf5Q&oe=680D273C",
       title: "Slide 1"
     },
     {
       id: 2,
-      image: "https://ngonfruit.com/wp-content/uploads/2021/09/banner-2-1.jpg",
+      image: "https://freshfruitfarm.vn/uploads/images/2022/03/1646204476-single_banner49-banner2copy.jpg",
       title: "Slide 2"
     },
     {
       id: 3,
-      image: "https://fujifruit.com.vn/wp-content/uploads/2023/09/6.jpg",
+      image: "https://image.chukouplus.com/upload/C_3875/file/20240105/1bd35c3aec859cf155f411a34b50247c.jpg?x-oss-process=image/format,webp,image/resize,m_pad,h_850,w_1920,color_FFFFFF&1",
       title: "Slide 3"
     },
     {
       id: 4,
-      image: "https://fujifruit.com.vn/wp-content/uploads/2023/03/7-01.jpg",
+      image: "https://www.wadherafruit.com/wp-content/uploads/2017/01/slide1.jpg",
       title: "Slide 4"
     },
     {
       id: 5,
       image:
-        "https://delifruit.vn/wp-content/uploads/2024/04/banner-chan-trang.jpg",
+        "https://bizweb.dktcdn.net/100/478/999/themes/897810/assets/slider_2.jpg?1729570356470",
       title: "Slide 5"
     },
     {
       id: 6,
       image:
-        "https://shophoaqua.vn/public/media/file/files/slider/banner-bottom.png",
+      "https://freshfruitfarm.vn/uploads/images/2022/03/1646204506-single_banner49-banner3.jpg",
       title: "Slide 6"
     }
   ]
@@ -54,7 +54,7 @@ function BannerSlide() {
             <img
               src={slide.image}
               alt={slide.title}
-              className="w-full h-auto rounded-lg"
+              className="w-full h-auto rounded-lg object-cover"
             />
           </SwiperSlide>
         ))}

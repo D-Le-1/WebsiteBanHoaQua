@@ -11,10 +11,30 @@ import {
   Stack
 } from "@mui/material"
 import { useOrderUser } from "../../useQuery/hooks/useOrderUser"
+import { editStatus } from "../../useQuery/api/api"
+import { useParams } from "react-router-dom"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { toast } from 'react-toastify';
 
 const OrderPageUser = () => {
+  const {id} = useParams()
+  const queryClient = useQueryClient()
   const { data } = useOrderUser()
-  console.log(data)
+  const mutation = useMutation({
+    mutationFn: editStatus,
+    onSuccess: () => {
+      toast.success("Hủy đơn hàng thành công")
+      queryClient.invalidateQueries(["orderusers"])
+    },
+    onError: () =>{
+      toast.error("Không thể hủy đơn hàng")
+    }
+  })
+
+  const changeHandle = (id: string, currentStatus: string) => {
+    const newStatus = "cancelled"; // Bạn có thể thêm logic điều kiện nếu cần
+    mutation.mutate({ id, newStatus });
+  };
   return (
     <div className="max-w-7xl mx-auto p-8 space-y-10 flex flex-col md:flex-row lg:flex-col">
       <div className="space-x-2">
@@ -103,7 +123,14 @@ const OrderPageUser = () => {
                       {order.status}
                     </TableCell>
                     <TableCell>
-                      <Button>Cancel</Button>
+                      <Button
+                        onClick={() => changeHandle(order._id, order.status)}
+                        variant="contained"
+                        color="error"
+                        disabled={mutation.isLoading || order.status !== "pending"}
+                      >
+                        {mutation.isLoading ? "Cancelling..." : "Cancel"}
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}

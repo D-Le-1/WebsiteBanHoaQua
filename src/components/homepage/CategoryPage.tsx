@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { useCategory } from '../../useQuery/hooks/useCategory';
 import { Link, useParams } from 'react-router-dom';
 import CategoryComponent from '../sidebar/categoryComponent';
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { useProductwithCate } from '../../useQuery/hooks/useProductwithCate';
 import Sort from '../sidebar/sortComponent';
 
@@ -20,13 +23,7 @@ const CategoryPage = () => {
     return (
         <div className="container mx-auto p-4 space-y-5">
             <p className="text-2xl font-bold">{t("productPage.category")}</p>
-            <div className="flex justify-center space-x-10">
-                {category?.categories.map((category, index) => (
-                    <Link key={index} to={`/category/${category.name}`}>
-                        <CategoryComponent name={category.name} />
-                    </Link>
-                ))}
-            </div>
+            <CategorySlider categories={category?.categories}/>
             <BannerSlide />
             <h2 className="text-2xl font-bold text-orange-500 mb-4">{currentCategory?.name}</h2>
 
@@ -71,5 +68,52 @@ const CategoryPage = () => {
         </div>
     );
 };
+
+
+const CategorySlider = ({ categories }) => {
+    const settings = {
+      dots: false,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 7,
+      slidesToScroll: 1,
+      arrows: true,
+      autoplay: true,
+      autoplaySpeed: 3000,
+      centerMode: true, // Optional: Set to true if you want centered slides
+      variableWidth: false, // Ensure consistent width for slides
+      slidesPerRow: 1,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 1,
+          },
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+          },
+        },
+      ],
+    };
+  
+    return (
+      <div className="p-2">
+        <Slider {...settings}>
+          {categories?.map((category) => (
+            <div key={category.name} className="px-12">
+              <Link to={`/category/${category.name}`} className="block">
+                <CategoryComponent name={category.name} />
+              </Link>
+            </div>
+          ))}
+        </Slider>
+      </div>
+    );
+  };
 
 export default CategoryPage;

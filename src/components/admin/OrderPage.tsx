@@ -12,6 +12,7 @@ import {
   Stack
 } from "@mui/material"
 import { useOrder } from "../../useQuery/hooks/useOrder"
+import { Link } from "react-router-dom"
 import { editStatus } from "../../useQuery/api/api"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-toastify"
@@ -60,9 +61,17 @@ const OrderPage: React.FC = () => {
     })
 
     const changeStatusHandle = (id: number, currentStatus: string) => {
-      const newStatus = currentStatus === "pending" ? "confirmed" : "pending"
-      mutation.mutate({ id, newStatus })
-    }
+      const nextStatusMap: Record<string, string> = {
+        pending: "confirmed",
+        confirmed: "shipping",
+        shipping: "delivered",
+        delivered: "pending",
+      };
+    
+      const newStatus = nextStatusMap[currentStatus] || "pending";
+      mutation.mutate({ id, newStatus });
+    };
+    
 
   return (
     <div className="p-6">
@@ -156,29 +165,17 @@ const OrderPage: React.FC = () => {
                     </TableCell>
                     <TableCell className="border border-gray-300 p-2 text-center">
                       <div className="flex items-center justify-center space-x-2">
-                        <span
-                          className={`px-3 py-1 h-fit text-white text-sm font-semibold 
-                                                ${
-                                                  order.status === "pending"
-                                                    ? "bg-yellow-500"
-                                                    : "bg-green-500"
-                                                }`}
-                        >
-                          {order.status === "pending"
-                            ? "⏳ Pending"
-                            : "✅ Completed"}
-                        </span>
+                        <Button variant="outlined">
+                            <Link to={`/admin/orders/${order._id}`}>Detail</Link>
+                        </Button>
                         <Button
-                          onClick={() =>
-                            changeStatusHandle(order._id, order.status)
-                          }
+                          onClick={() => changeStatusHandle(order._id, order.status)}
                           variant="contained"
-                          color={
-                            order.status === "pending" ? "success" : "warning"
-                          }
-                          className="transition-transform transform hover:scale-105"
+                          color="primary"
+                          className="transition-transform w-28 transform hover:scale-105"
+                          disabled={order.status === "delivered"}
                         >
-                          {order.status === "pending" ? "Hoàn tất" : "Đặt lại"}
+                          Cập nhật
                         </Button>
                       </div>
                     </TableCell>

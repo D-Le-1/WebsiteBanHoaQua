@@ -20,6 +20,8 @@ import CouponPage from "../components/admin/Coupon"
 import CategoryUser from "../pages/CategoryUser"
 import OrderSuccess  from "../pages/OrderSuccess"
 import OrderFailedPage from "../pages/OrderFailed"
+import Dashboard from "../pages/Dashboard"
+import OrderDetailsAdmin from "../pages/OrderDetailsAdmin"
 
 export const routes: RouteObject[] = [
   {
@@ -92,11 +94,11 @@ export const routes: RouteObject[] = [
     element: <AdminOrder />,
     children: []
   },
-  {
-    path: "/chat",
-    element: <Chat />,
-    children: []
-  },
+  // {
+  //   path: "/chat",
+  //   element: <Chat />,
+  //   children: []
+  // },
   {
     path: "/admin/user",
     element: <AdminUser />,
@@ -124,6 +126,16 @@ export const routes: RouteObject[] = [
   {
     path:'/order-failed',
     element:<OrderFailedPage/>,
+    children:[]
+  },
+  {
+    path:'/admin/dashboard',
+    element:<Dashboard/>,
+    children:[]
+  },
+  {
+    path:'/admin/orders/:id',
+    element:<OrderDetailsAdmin/>,
     children:[]
   }
 ]

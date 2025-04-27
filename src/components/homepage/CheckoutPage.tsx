@@ -30,16 +30,19 @@ const CheckOutPage = () => {
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem("user") || "null")
     setUser(savedUser)
-  }, [])
-
-  useEffect(() => {
-    if (user?.email) {
-      setFormData((prev) => ({
+    
+    // Nếu user có dữ liệu, điền vào form
+    if (savedUser) {
+      setFormData(prev => ({
         ...prev,
-        email: user.email, // Update email when user is available
-      }));
+        firstName: savedUser.name || "",
+        email: savedUser.email || "",
+        phone: savedUser.phone || "",
+        streetAddress: savedUser.address?.split(', ')[0] || "",  // Giả sử địa chỉ lưu dạng "street, city"
+        city: savedUser.address?.split(', ')[1] || ""
+      }))
     }
-  }, [user]);
+  }, [])
 
   useEffect(() => {
     const saveTotal = JSON.parse(localStorage.getItem("Total"))
@@ -206,12 +209,13 @@ const CheckOutPage = () => {
       <div className="md:flex">
         <div className="space-y-2">
           <h1 className="text-xl font-bold">Billing Details</h1>
-          <p className="text-zinc-400 text-sm">First Name</p>
+          <p className="text-zinc-400 text-sm">Name</p>
           <input
             type="text"
             className="w-96 h-12 p-2 shadow-md rounded-md"
             required
             name="firstName"
+            defaultValue={user?.name}
             value={formData.firstName}
             onChange={handleChange}
           />

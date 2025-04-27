@@ -7,9 +7,7 @@ import LoginPage from "../components/aut/Login"
 function Login(): ReactElement {
   return (
     <div className="">
-
       <LoginPage />
-
     </div>
   )
 }

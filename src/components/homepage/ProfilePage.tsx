@@ -43,6 +43,9 @@ const ProfilePage: React.FC = () => {
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setUser(updatedUser);
       setOpenModal(false);
+      setTimeout(()=>{
+        window.location.reload()
+      }, 1000)
     },
     onError: (error) => {
       console.error("Error updating profile:", error);

@@ -36,7 +36,9 @@
     "explore": "Trái ngon hôm nay",
     "stock": "Kho:",
     "addToCart": "Thêm vào giỏ hàng",
-    "relateProduct":"Sản phẩm liên quan"
+    "relateProduct":"Sản phẩm liên quan",
+    "bestSeller": "Sản phẩm bán chạy",
+    "sold": "Đã bán"
   },
   "common": {
     "addedToCartSuccess": "🛒 Sản phẩm đã được thêm vào giỏ hàng!",
