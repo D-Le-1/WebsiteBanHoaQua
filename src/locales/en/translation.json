@@ -38,7 +38,8 @@
     "addToCart": "Add to Cart",
     "relateProduct":"Relate products",
     "bestSeller": "Best Seller",
-    "sold": "Sold"
+    "sold": "Sold",
+    "productNews": "🆕 New Products"
   },
   "common": {
     "addedToCartSuccess": "🛒 Product has been added to your cart!",
@@ -89,5 +90,70 @@
         "Low to high",
         "High to low"
       ]
+    },
+    "category": {
+    "flower": {
+      "title": "High-quality flowers",
+      "description": "Clearly inspected and certified"
+    },
+    "food": {
+      "title": "Clean food",
+      "description": "Closed production process"
+    },
+    "fruit": {
+      "title": "Fresh fruits",
+      "description": "Imported & local fruits"
     }
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "We are always ready to assist you.",
+    "contactInfo": "Contact Information",
+    "address": "Address",
+    "workingHours": "Working Hours",
+    "connectWithUs": "Connect with us",
+    "map": "Map",
+    "formTitle": "Send a Message",
+    "form": {
+      "name": "Full Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "subject": "Subject",
+      "message": "Message",
+      "submit": "Send",
+      "namePlaceholder": "John Doe",
+      "emailPlaceholder": "email@domain.com",
+      "phonePlaceholder": "0123456789",
+      "subjectPlaceholder": "Subject",
+      "messagePlaceholder": "Message content..."
+    },
+    "errors": {
+      "name": "Please enter your full name",
+      "emailRequired": "Please enter your email",
+      "emailInvalid": "Invalid email",
+      "phoneRequired": "Please enter your phone number",
+      "phoneInvalid": "Invalid phone number",
+      "subject": "Please enter the subject",
+      "message": "Please enter the message content"
+    },
+    "successMessage": "Message sent successfully!",
+    "errorMessage": "An error occurred. Please try again later."
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "questions": [
+      {
+        "question": "How long is the response time?",
+        "answer": "We typically respond to inquiries within 24 business hours."
+      },
+      {
+        "question": "How do I place an order?",
+        "answer": "You can place an order directly on the website or contact us via phone."
+      },
+      {
+        "question": "What is the return policy?",
+        "answer": "We have a return policy within 7 days from the date of receipt."
+      }
+    ]
+  }
 }

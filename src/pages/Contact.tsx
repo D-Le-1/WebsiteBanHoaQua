@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaClock } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
-function Contact(): ReactElement {
+function Contact() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,7 +22,6 @@ function Contact(): ReactElement {
       ...formData,
       [name]: value
     });
-    // Clear error when user types
     if (errors[name]) {
       setErrors({
         ...errors,
@@ -32,19 +33,19 @@ function Contact(): ReactElement {
   const validate = () => {
     const newErrors = {};
     
-    if (!formData.name.trim()) newErrors.name = 'Vui lòng nhập họ tên';
+    if (!formData.name.trim()) newErrors.name = t('contact.errors.name');
     if (!formData.email.trim()) {
-      newErrors.email = 'Vui lòng nhập email';
+      newErrors.email = t('contact.errors.emailRequired');
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email không hợp lệ';
+      newErrors.email = t('contact.errors.emailInvalid');
     }
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Vui lòng nhập số điện thoại';
+      newErrors.phone = t('contact.errors.phoneRequired');
     } else if (!/^[0-9]{10,11}$/.test(formData.phone.replace(/\s/g, ''))) {
-      newErrors.phone = 'Số điện thoại không hợp lệ';
+      newErrors.phone = t('contact.errors.phoneInvalid');
     }
-    if (!formData.subject.trim()) newErrors.subject = 'Vui lòng nhập chủ đề';
-    if (!formData.message.trim()) newErrors.message = 'Vui lòng nhập nội dung tin nhắn';
+    if (!formData.subject.trim()) newErrors.subject = t('contact.errors.subject');
+    if (!formData.message.trim()) newErrors.message = t('contact.errors.message');
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -58,7 +59,6 @@ function Contact(): ReactElement {
     setLoading(true);
     
     try {
-      // Replace with your actual API endpoint
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -70,8 +70,7 @@ function Contact(): ReactElement {
       const data = await response.json();
       
       if (data.success) {
-        toast.success('Tin nhắn đã được gửi thành công!');
-        // Reset form after successful submission
+        toast.success(t('contact.successMessage'));
         setFormData({
           name: '',
           email: '',
@@ -80,22 +79,23 @@ function Contact(): ReactElement {
           message: ''
         });
       } else {
-        toast.error(data.message || 'Có lỗi xảy ra. Vui lòng thử lại sau.');
+        toast.error(data.message || t('contact.errorMessage'));
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast.error('Có lỗi xảy ra. Vui lòng thử lại sau.');
+      toast.error(t('contact.errorMessage'));
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <div className="bg-gray-50">
       {/* Banner */}
       <div className="bg-primary text-white text-center">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-4">Liên Hệ Với Chúng Tôi</h1>
-          <p className="text-lg">Hãy để lại thông tin, chúng tôi sẽ liên hệ với bạn sớm nhất có thể</p>
+          <h1 className="text-4xl font-bold mb-4">{t('contact.title')}</h1>
+          <p className="text-lg">{t('contact.subtitle')}</p>
         </div>
       </div>
 
@@ -104,7 +104,7 @@ function Contact(): ReactElement {
           {/* Contact Information */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-semibold mb-6">Thông Tin Liên Hệ</h2>
+              <h2 className="text-2xl font-semibold mb-6">{t('contact.contactInfo')}</h2>
               
               <div className="space-y-6">
                 <div className="flex items-start">
@@ -112,7 +112,7 @@ function Contact(): ReactElement {
                     <FaMapMarkerAlt className="text-primary text-xl" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900">Địa Chỉ</h3>
+                    <h3 className="font-medium text-gray-900">{t('contact.address')}</h3>
                     <p className="text-gray-600 mt-1">123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh</p>
                   </div>
                 </div>
@@ -122,7 +122,7 @@ function Contact(): ReactElement {
                     <FaPhoneAlt className="text-primary text-xl" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900">Điện Thoại</h3>
+                    <h3 className="font-medium text-gray-900">{t('contact.form.phone')}</h3>
                     <p className="text-gray-600 mt-1">0123 456 789</p>
                   </div>
                 </div>
@@ -132,7 +132,7 @@ function Contact(): ReactElement {
                     <FaEnvelope className="text-primary text-xl" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900">Email</h3>
+                    <h3 className="font-medium text-gray-900">{t('contact.form.email')}</h3>
                     <p className="text-gray-600 mt-1">support@yourcompany.com</p>
                   </div>
                 </div>
@@ -142,7 +142,7 @@ function Contact(): ReactElement {
                     <FaClock className="text-primary text-xl" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900">Giờ Làm Việc</h3>
+                    <h3 className="font-medium text-gray-900">{t('contact.workingHours')}</h3>
                     <p className="text-gray-600 mt-1">Thứ 2 - Thứ 6: 8:00 - 17:00</p>
                     <p className="text-gray-600">Thứ 7: 8:00 - 12:00</p>
                   </div>
@@ -151,7 +151,7 @@ function Contact(): ReactElement {
               
               {/* Social Media Links */}
               <div className="mt-8">
-                <h3 className="font-medium text-gray-900 mb-3">Kết nối với chúng tôi</h3>
+                <h3 className="font-medium text-gray-900 mb-3">{t('contact.connectWithUs')}</h3>
                 <div className="flex space-x-4">
                   <a href="#" className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -174,11 +174,10 @@ function Contact(): ReactElement {
             
             {/* Map */}
             <div className="bg-white rounded-lg shadow-md p-6 mt-6">
-              <h2 className="text-2xl font-semibold mb-4">Bản Đồ</h2>
+              <h2 className="text-2xl font-semibold mb-4">{t('contact.map')}</h2>
               <div className="aspect-video bg-gray-200 rounded-lg">
-                {/* Replace with actual map component */}
                 <div className="w-full h-full flex items-center justify-center text-gray-500">
-                  Map goes here
+                  {t('contact.map')}
                 </div>
               </div>
             </div>
@@ -187,12 +186,12 @@ function Contact(): ReactElement {
           {/* Contact Form */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-semibold mb-6">Gửi Tin Nhắn</h2>
+              <h2 className="text-2xl font-semibold mb-6">{t('contact.formTitle')}</h2>
               
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="name" className="block text-gray-700 mb-2">Họ và tên <span className="text-red-500">*</span></label>
+                    <label htmlFor="name" className="block text-gray-700 mb-2">{t('contact.form.name')} <span className="text-red-500">*</span></label>
                     <input
                       type="text"
                       id="name"
@@ -200,13 +199,13 @@ function Contact(): ReactElement {
                       value={formData.name}
                       onChange={handleChange}
                       className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
-                      placeholder="Nguyễn Văn A"
+                      placeholder={t('contact.form.namePlaceholder')}
                     />
                     {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                   </div>
                   
                   <div>
-                    <label htmlFor="email" className="block text-gray-700 mb-2">Email <span className="text-red-500">*</span></label>
+                    <label htmlFor="email" className="block text-gray-700 mb-2">{t('contact.form.email')} <span className="text-red-500">*</span></label>
                     <input
                       type="email"
                       id="email"
@@ -214,13 +213,13 @@ function Contact(): ReactElement {
                       value={formData.email}
                       onChange={handleChange}
                       className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
-                      placeholder="example@email.com"
+                      placeholder={t('contact.form.emailPlaceholder')}
                     />
                     {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                   </div>
                   
                   <div>
-                    <label htmlFor="phone" className="block text-gray-700 mb-2">Số điện thoại <span className="text-red-500">*</span></label>
+                    <label htmlFor="phone" className="block text-gray-700 mb-2">{t('contact.form.phone')} <span className="text-red-500">*</span></label>
                     <input
                       type="tel"
                       id="phone"
@@ -228,13 +227,13 @@ function Contact(): ReactElement {
                       value={formData.phone}
                       onChange={handleChange}
                       className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${errors.phone ? 'border-red-500' : 'border-gray-300'}`}
-                      placeholder="0123 456 789"
+                      placeholder={t('contact.form.phonePlaceholder')}
                     />
                     {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
                   </div>
                   
                   <div>
-                    <label htmlFor="subject" className="block text-gray-700 mb-2">Chủ đề <span className="text-red-500">*</span></label>
+                    <label htmlFor="subject" className="block text-gray-700 mb-2">{t('contact.form.subject')} <span className="text-red-500">*</span></label>
                     <input
                       type="text"
                       id="subject"
@@ -242,14 +241,14 @@ function Contact(): ReactElement {
                       value={formData.subject}
                       onChange={handleChange}
                       className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${errors.subject ? 'border-red-500' : 'border-gray-300'}`}
-                      placeholder="Chủ đề của bạn"
+                      placeholder={t('contact.form.subjectPlaceholder')}
                     />
                     {errors.subject && <p className="text-red-500 text-sm mt-1">{errors.subject}</p>}
                   </div>
                 </div>
                 
                 <div className="mt-6">
-                  <label htmlFor="message" className="block text-gray-700 mb-2">Nội dung tin nhắn <span className="text-red-500">*</span></label>
+                  <label htmlFor="message" className="block text-gray-700 mb-2">{t('contact.form.message')} <span className="text-red-500">*</span></label>
                   <textarea
                     id="message"
                     name="message"
@@ -257,7 +256,7 @@ function Contact(): ReactElement {
                     onChange={handleChange}
                     rows="6"
                     className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${errors.message ? 'border-red-500' : 'border-gray-300'}`}
-                    placeholder="Nội dung tin nhắn của bạn..."
+                    placeholder={t('contact.form.messagePlaceholder')}
                   ></textarea>
                   {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
                 </div>
@@ -274,10 +273,10 @@ function Contact(): ReactElement {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        Đang gửi...
+                        {t('contact.form.submit')}...
                       </>
                     ) : (
-                      'Gửi Tin Nhắn'
+                      t('contact.form.submit')
                     )}
                   </button>
                 </div>
@@ -286,22 +285,22 @@ function Contact(): ReactElement {
             
             {/* FAQ Section */}
             <div className="bg-white rounded-lg shadow-md p-6 mt-6">
-              <h2 className="text-2xl font-semibold mb-6">Câu Hỏi Thường Gặp</h2>
+              <h2 className="text-2xl font-semibold mb-6">{t("faq.title")}</h2>
               
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-medium text-gray-900">Thời gian phản hồi là bao lâu?</h3>
-                  <p className="text-gray-600 mt-1">Chúng tôi thường phản hồi các yêu cầu trong vòng 24 giờ làm việc.</p>
+                  <h3 className="font-medium text-gray-900">{t("faq.questions.0.question")}</h3>
+                  <p className="text-gray-600 mt-1">{t("faq.questions.0.answer")}</p>
                 </div>
                 
                 <div>
-                  <h3 className="font-medium text-gray-900">Làm thế nào để đặt hàng?</h3>
-                  <p className="text-gray-600 mt-1">Bạn có thể đặt hàng trực tiếp trên website hoặc liên hệ với chúng tôi qua số điện thoại.</p>
+                  <h3 className="font-medium text-gray-900">{t("faq.questions.1.question")}</h3>
+                  <p className="text-gray-600 mt-1">{t("faq.questions.1.answer")}</p>
                 </div>
                 
                 <div>
-                  <h3 className="font-medium text-gray-900">Chính sách đổi trả như thế nào?</h3>
-                  <p className="text-gray-600 mt-1">Chúng tôi có chính sách đổi trả trong vòng 7 ngày kể từ ngày nhận hàng.</p>
+                  <h3 className="font-medium text-gray-900">{t("faq.questions.2.question")}</h3>
+                  <p className="text-gray-600 mt-1">{t("faq.questions.2.answer")}</p>
                 </div>
               </div>
             </div>
@@ -310,20 +309,20 @@ function Contact(): ReactElement {
       </div>
       
       {/* Newsletter */}
-      <div className="bg-primary text-white py-12">
+      <div className="bg-emerald-100 text-black py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-4">Đăng Ký Nhận Tin</h2>
-            <p className="mb-6">Nhận thông tin khuyến mãi và cập nhật mới nhất từ chúng tôi</p>
+            <h2 className="text-3xl font-bold mb-4">Subscribe to Newsletter</h2>
+            <p className="mb-6">Receive promotions and the latest updates from us</p>
             
             <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
               <input
                 type="email"
-                placeholder="Email của bạn"
+                placeholder={t('contact.form.emailPlaceholder')}
                 className="px-4 py-3 rounded-lg flex-grow focus:outline-none"
               />
               <button className="bg-white text-primary font-medium px-6 py-3 rounded-lg hover:bg-gray-100 transition">
-                Đăng Ký
+                Subscribe
               </button>
             </div>
           </div>
@@ -333,4 +332,4 @@ function Contact(): ReactElement {
   );
 };
 
-export default Contact
+export default Contact;

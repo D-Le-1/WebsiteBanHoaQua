@@ -38,7 +38,8 @@
     "addToCart": "Thêm vào giỏ hàng",
     "relateProduct":"Sản phẩm liên quan",
     "bestSeller": "Sản phẩm bán chạy",
-    "sold": "Đã bán"
+    "sold": "Đã bán",
+    "productNews": "🆕 Sản phẩm mới"
   },
   "common": {
     "addedToCartSuccess": "🛒 Sản phẩm đã được thêm vào giỏ hàng!",
@@ -89,5 +90,70 @@
         "Thấp đến cao",
         "Cao đến thấp"
       ]
+    },
+    "category": {
+    "flower": {
+      "title": "Hoa chất lượng",
+      "description": "Được kiểm định rõ ràng"
+    },
+    "food": {
+      "title": "Thực phẩm sạch",
+      "description": "Quy trình sản xuất kín"
+    },
+    "fruit": {
+      "title": "Trái cây tươi",
+      "description": "Nhập khẩu & trong nước"
     }
+  },
+  "contact": {
+    "title": "Liên Hệ",
+    "subtitle": "Chúng tôi luôn sẵn sàng hỗ trợ bạn.",
+    "contactInfo": "Thông Tin Liên Hệ",
+    "address": "Địa chỉ",
+    "workingHours": "Giờ Làm Việc",
+    "connectWithUs": "Kết nối với chúng tôi",
+    "map": "Bản đồ",
+    "formTitle": "Gửi Tin Nhắn",
+    "form": {
+      "name": "Họ và tên",
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "subject": "Chủ đề",
+      "message": "Nội dung",
+      "submit": "Gửi",
+      "namePlaceholder": "Nguyễn Văn A",
+      "emailPlaceholder": "email@domain.com",
+      "phonePlaceholder": "0123456789",
+      "subjectPlaceholder": "Chủ đề",
+      "messagePlaceholder": "Nội dung tin nhắn..."
+    },
+    "errors": {
+      "name": "Vui lòng nhập họ tên",
+      "emailRequired": "Vui lòng nhập email",
+      "emailInvalid": "Email không hợp lệ",
+      "phoneRequired": "Vui lòng nhập số điện thoại",
+      "phoneInvalid": "Số điện thoại không hợp lệ",
+      "subject": "Vui lòng nhập chủ đề",
+      "message": "Vui lòng nhập nội dung tin nhắn"
+    },
+    "successMessage": "Tin nhắn đã được gửi thành công!",
+    "errorMessage": "Có lỗi xảy ra. Vui lòng thử lại sau."
+  },
+  "faq": {
+    "title": "Câu Hỏi Thường Gặp",
+    "questions": [
+      {
+        "question": "Thời gian phản hồi là bao lâu?",
+        "answer": "Chúng tôi thường phản hồi các yêu cầu trong vòng 24 giờ làm việc."
+      },
+      {
+        "question": "Làm thế nào để đặt hàng?",
+        "answer": "Bạn có thể đặt hàng trực tiếp trên website hoặc liên hệ với chúng tôi qua số điện thoại."
+      },
+      {
+        "question": "Chính sách đổi trả như thế nào?",
+        "answer": "Chúng tôi có chính sách đổi trả trong vòng 7 ngày kể từ ngày nhận hàng."
+      }
+    ]
+  }
 }

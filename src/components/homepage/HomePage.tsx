@@ -15,23 +15,24 @@ import Sort from "../sidebar/sortComponent"
 import dayjs from "dayjs"
 
 const Card = () => {
+  const {t} = useTranslation()
   const cardsData = [
     {
-      title: "Hoa chất lượng",
-      description: "Được kiểm định rõ ràng",
+      title: "category.flower.title",
+      description: "category.flower.description",
       bgImage: "https://hoatuoi360.vn/upload/hinhanh/hoa-de-ban-05_-hoa-tuoi-360217.png",
     },
     {
-      title: "Thực phẩm sạch",
-      description: "Quy trình sản xuất kín",
+      title: "category.food.title",
+      description: "category.food.description",
       bgImage: "https://defarm.vn/wp-content/uploads/2021/07/Thuc-Pham-Duoc-Xep-Loai-Tieu-Chuan.jpg",
     },
     {
-      title: "Trái cây tươi",
-      description: "Nhập khẩu & trong nước",
+      title: "category.fruit.title",
+      description: "category.fruit.description",
       bgImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTx5aRpfuFisb1TYIRIRdBg3mN5p5VJMNnIDA&s",
-    },
-  ];
+    }
+  ]
   return (
     <div className="container flex flex-col md:flex-row justify-center gap-4 p-4 bg-gray-100">
       {cardsData.map((card, index) => (
@@ -44,8 +45,8 @@ const Card = () => {
           }}
         />
         <div className="relative z-10">
-          <h2 className="text-xl md:text-2xl font-bold mb-2">{card.title}</h2>
-          <p className="text-sm">{card.description}</p>
+          <h2 className="text-xl md:text-2xl font-bold mb-2">{t(card.title)}</h2>
+          <p className="text-sm">{t(card.description)}</p>
         </div>
       </div>
       ))}      
@@ -61,7 +62,7 @@ function NewProductsComponent({products, handleAddToCart}){
   return(
     <div className="container flex space-x-2 mb-2">
       <section>
-        <h2 className="text-2xl font-bold mb-5 text-red-500">🆕 Sản phẩm mới</h2>
+        <h2 className="text-2xl font-bold mb-5 text-red-500">{t("productPage.productNews")}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
           {newProducts?.map(product => (
             <div
