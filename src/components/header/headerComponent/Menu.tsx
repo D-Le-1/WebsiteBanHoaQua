@@ -46,6 +46,7 @@ const Menu = () => {
       </button>
       <ul className="hidden lg:flex space-x-6 text-gray-600 font-medium">
         <li><Link to="/">{t("menu.home")}</Link></li>
+        <li><Link to="/products">{t("menu.product")}</Link></li>
         <li><Link to="/contact">{t("menu.contact")}</Link></li>
         <li><Link to="/about">{t("menu.about")}</Link></li>
         <li>
@@ -59,6 +60,7 @@ const Menu = () => {
       {menuOpen && (
         <ul className="absolute top-12 left-0 bg-white shadow-md w-48 p-4 rounded-md space-y-4 lg:hidden text-gray-700 font-medium z-50">
           <li><Link to="/">{t("menu.home")}</Link></li>
+          <li><Link to="/products">{t("menu.product")}</Link></li>
           <li><Link to="/contact">{t("menu.contact")}</Link></li>
           <li><Link to="/about">{t("menu.about")}</Link></li>
           <li>

@@ -23,7 +23,7 @@ const Header: React.FC = () => {
   return (
     <header>
       {/* Top Banner */}
-      <div className="flex justify-around bg-emerald-50 text-black text-center py-4 text-sm">
+      <div className="flex justify-around bg-gradient-to-tl from-lime-200 to-emerald-300 text-black text-center py-4 text-sm">
         <div>
           Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!{" "}
           <span className="font-bold cursor-pointer ml-2">ShopNow</span>

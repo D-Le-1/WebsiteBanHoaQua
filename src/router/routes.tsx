@@ -22,6 +22,8 @@ import OrderSuccess  from "../pages/OrderSuccess"
 import OrderFailedPage from "../pages/OrderFailed"
 import Dashboard from "../pages/Dashboard"
 import OrderDetailsAdmin from "../pages/OrderDetailsAdmin"
+import ProductPage from "../pages/ProductPage"
+import SearchPage from "../pages/SearchPage"
 
 export const routes: RouteObject[] = [
   {
@@ -136,6 +138,16 @@ export const routes: RouteObject[] = [
   {
     path:'/admin/orders/:id',
     element:<OrderDetailsAdmin/>,
+    children:[]
+  },
+  {
+    path:'/products',
+    element:<ProductPage />,
+    children:[]
+  },
+  {
+    path:'/search',
+    element:<SearchPage />,
     children:[]
   }
 ]

@@ -12,9 +12,6 @@ const ReviewSystem = ({ productId, userId, userName, reviewList }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  // Debug the data received as props
-  console.log("ReviewSystem props:", { productId, userId, userName, reviewList });
-
   const addReviewMutation = useMutation({
     mutationFn: addReview,
     onSuccess: () => {

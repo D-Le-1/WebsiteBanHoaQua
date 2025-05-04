@@ -176,8 +176,16 @@ function Contact() {
             <div className="bg-white rounded-lg shadow-md p-6 mt-6">
               <h2 className="text-2xl font-semibold mb-4">{t('contact.map')}</h2>
               <div className="aspect-video bg-gray-200 rounded-lg">
-                <div className="w-full h-full flex items-center justify-center text-gray-500">
-                  {t('contact.map')}
+              <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.473788451507!2d105.73253187550034!3d21.05373098060198!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31345457e292d5bf%3A0x20ac91c94d74439a!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBDw7RuZyBuZ2hp4buHcCBIw6AgTuG7mWk!5e0!3m2!1svi!2s!4v1746024822824!5m2!1svi!2s"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
                 </div>
               </div>
             </div>

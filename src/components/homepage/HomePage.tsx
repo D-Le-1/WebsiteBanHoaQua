@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import { useProduct } from "../../useQuery/hooks/useProduct"
-import { useMutation } from "@tanstack/react-query"
-import { Product, CartItem } from "../../useQuery/user/auth"
-import { toast } from "react-toastify"
-import { useTranslation } from "react-i18next"
-import { useCategory } from "../../useQuery/hooks/useCategory"
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useProduct } from "../../useQuery/hooks/useProduct";
+import { Product, CartItem } from "../../useQuery/user/auth";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+import { useCategory } from "../../useQuery/hooks/useCategory";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import BannerSlide from "../rating/BannerSlide"
-import CategoryComponent from "../sidebar/categoryComponent"
-import Sort from "../sidebar/sortComponent"
-import dayjs from "dayjs"
+import BannerSlide from "../rating/BannerSlide";
+import CategoryComponent from "../sidebar/categoryComponent";
+import Sort from "../sidebar/sortComponent";
+import dayjs from "dayjs";
+import useFavoriteStore from "../../zustand/store/wishListStore";
 
 const Card = () => {
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   const cardsData = [
     {
       title: "category.flower.title",
@@ -32,82 +32,107 @@ const Card = () => {
       description: "category.fruit.description",
       bgImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTx5aRpfuFisb1TYIRIRdBg3mN5p5VJMNnIDA&s",
     }
-  ]
+  ];
+  
   return (
     <div className="container flex flex-col md:flex-row justify-center gap-4 p-4 bg-gray-100">
       {cardsData.map((card, index) => (
-        <div className="w-full md:w-96 h-48 rounded-lg shadow-lg flex flex-col justify-center items-center text-center text-white p-4 relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center transition-all duration-500 ease-in-out hover:bg-[length:150%]"
-          style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${card.bgImage})`,
-            border: "2px solid #34C759",
-          }}
-        />
-        <div className="relative z-10">
-          <h2 className="text-xl md:text-2xl font-bold mb-2">{t(card.title)}</h2>
-          <p className="text-sm">{t(card.description)}</p>
+        <div key={index} className="w-full md:w-96 h-48 rounded-lg shadow-lg flex flex-col justify-center items-center text-center text-white p-4 relative overflow-hidden">
+          <div
+            className="absolute inset-0 bg-cover bg-center transition-all duration-500 ease-in-out hover:bg-[length:150%]"
+            style={{
+              backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${card.bgImage})`,
+              border: "2px solid #34C759",
+            }}
+          />
+          <div className="relative z-10">
+            <h2 className="text-xl md:text-2xl font-bold mb-2">{t(card.title)}</h2>
+            <p className="text-sm">{t(card.description)}</p>
+          </div>
         </div>
-      </div>
       ))}      
     </div>
   );
 };
 
-
-function NewProductsComponent({products, handleAddToCart}){
-  const {t} = useTranslation()
-  const today = dayjs()
-  const newProducts = products?.filter(product => dayjs(product.createdAt).isAfter(today.subtract(7, "day")))
-  return(
+function NewProductsComponent({ products, onAddToCart }) {
+  const { t } = useTranslation();
+  const today = dayjs();
+  const newProducts = products?.filter(product => 
+    dayjs(product.createdAt).isAfter(today.subtract(7, "day"))
+  );
+  
+  // Use the favorite store directly in this component
+  const { addFavorite, removeFavorite, isFavorite } = useFavoriteStore();
+  
+  return (
     <div className="container flex space-x-2 mb-2">
       <section>
         <h2 className="text-2xl font-bold mb-5 text-red-500">{t("productPage.productNews")}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {newProducts?.map(product => (
-            <div
-            key={product._id}
-            className="bg-white p-3 border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 relative"
-          >
-            <div className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 text-xs font-bold z-10 rounded-bl-lg">
-              NEW
-            </div>
-            <div className="aspect-w-1 aspect-h-1 w-full">
-              <img
-                crossOrigin="anonymous"
-                src={product.images[0]}
-                alt={product.name}
-                className="w-full h-full md:h-48 object-cover"
-              />
-            </div>
-              <p className="text-sm text-gray-500">{product.brand} || {Math.round(product.averageRating)}/5</p>
-              <Link to={`/productdetail/${product._id}`}>
-                <h3 className="text-lg font-semibold text-gray-800 hover:text-orange-500 transition">
-                  {product.name}
-                </h3>
-              </Link>
-              <p className="text-xl font-bold text-gray-900 mt-1">
-                {product.salePrice.toLocaleString()}₫
-              </p>
-              <div className="mt-3 flex justify-center max-w-md mx-auto">
-                <button
-                    onClick={() => handleAddToCart(product)}
+          {newProducts?.map(product => {
+            // Check favorite status for each individual product
+            const isProductFavorite = isFavorite(product._id);
+            
+            return (
+              <div
+                key={product._id}
+                className="bg-white p-3 border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 relative"
+              >
+                <div className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 text-xs font-bold z-10 rounded-bl-lg">
+                  NEW
+                </div>
+                <div className="absolute top-0 left-0 p-2 z-10">
+                  <button
+                    onClick={() => {
+                      if (isProductFavorite) {
+                        removeFavorite(product._id);
+                      } else {
+                        addFavorite(product);
+                      }
+                    }}
+                    className="text-2xl focus:outline-none"
+                    title={isProductFavorite ? t("productPage.removeFavorite") : t("productPage.addFavorite")}
+                  >
+                    {isProductFavorite ? "❤️" : "🤍"}
+                  </button>
+                </div>
+                <div className="aspect-w-1 aspect-h-1 w-full">
+                  <img
+                    crossOrigin="anonymous"
+                    src={product.images[0]}
+                    alt={product.name}
+                    className="w-full h-full md:h-48 object-cover"
+                  />
+                </div>
+                <p className="text-sm text-gray-500">{product.brand} || {Math.round(product.averageRating)}/5</p>
+                <Link to={`/productdetail/${product._id}`}>
+                  <h3 className="text-lg font-semibold text-gray-800 hover:text-orange-500 transition">
+                    {product.name}
+                  </h3>
+                </Link>
+                <p className="text-xl font-bold text-gray-900 mt-1">
+                  {product.salePrice.toLocaleString()}₫
+                </p>
+                <div className="mt-3 flex justify-center max-w-md mx-auto">
+                  <button
+                    onClick={() => onAddToCart(product)}
                     className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md text-sm sm:text-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white active:bg-orange-700 active:scale-95"
-                >
+                  >
                     {t("productPage.addToCart")}
-                </button>
+                  </button>
+                </div>
               </div>
-          </div>
-          ))}
+            );
+          })}
         </div>
       </section>
     </div>
-  )
+  );
 }
 
-
 function SupportSection() {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const services = [
     {
       icon: "🚚",
@@ -124,7 +149,7 @@ function SupportSection() {
       title: t("support.moneyBack"),
       description: t("support.moneyBackDesc")
     }
-  ]
+  ];
 
   return (
     <div className="py-10 border-b my-10">
@@ -140,39 +165,27 @@ function SupportSection() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
-const ProductPage = ({
-  product
-}: {
-  product: { id: string; name: string }
-}) => {
-  const { data, isLoading, isError } = useProduct()
-  const { t } = useTranslation()
-  const [productsToShow, setProductsToShow] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const productsPerPage = 12
-  const { data: category } = useCategory()
+const ProductPage = () => {
+  const { data, isLoading } = useProduct();
+  const { t } = useTranslation();
+  const [productsToShow, setProductsToShow] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 12;
+  const { data: category } = useCategory();
   const [sortOption, setSortOption] = useState("default");
+  const [cartUpdated, setCartUpdated] = useState(false);
 
-  useEffect(() => {
-    if (data?.products) {
-      const startIndex = (currentPage - 1) * productsPerPage
-      const endIndex = startIndex + productsPerPage
-      setProductsToShow(data.products.slice(startIndex, endIndex))
-    }
-  }, [data, currentPage])
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber)
-  }
-
+  // Use Zustand store directly
+  const { addFavorite, removeFavorite, isFavorite } = useFavoriteStore();
+  
   useEffect(() => {
     if (data?.products) {
       let sortedProducts = [...data.products];
       
-      // Sắp xếp theo các tùy chọn
+      // Sort products based on selected option
       switch (sortOption) {
         case "price-asc":
           sortedProducts.sort((a, b) => a.salePrice - b.salePrice);
@@ -187,7 +200,7 @@ const ProductPage = ({
           sortedProducts.sort((a, b) => b.name.localeCompare(a.name));
           break;
         default:
-          // Giữ nguyên thứ tự mặc định
+          // Keep default order
           break;
       }
       
@@ -197,40 +210,55 @@ const ProductPage = ({
     }
   }, [data, currentPage, sortOption]);
 
-  const handleSortChange = (e) => {
-    setSortOption(e.target.value);
-    setCurrentPage(1); // Reset về trang 1 khi thay đổi sắp xếp
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
-  const totalPages = Math.ceil(data?.products?.length / productsPerPage)
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
+    setCurrentPage(1); // Reset to page 1 when sorting changes
+  };
+
+  const totalPages = Math.ceil(data?.products?.length / productsPerPage) || 0;
+  
   const handleAddToCart = (product: Product) => {
     if (!product || !product._id) {
-      console.error("Product is undefined or missing _id")
-      return
+      console.error("Product is undefined or missing _id");
+      return;
     }
 
-    const newItem: CartItem = { product, quantity: 1 }
+    // Prevent duplicate operations
+    if (cartUpdated) return;
 
+    const newItem: CartItem = { product, quantity: 1 };
     const existingCart: CartItem[] = JSON.parse(
       localStorage.getItem("cart") || "[]"
-    )
+    );
 
     const existingIndex = existingCart.findIndex(
-      (item) => item.product._id === product._id // Sửa thành _id
-    )
+      (item) => item.product._id === product._id
+    );
 
     if (existingIndex >= 0) {
-      existingCart[existingIndex].quantity += 1
+      existingCart[existingIndex].quantity += 1;
     } else {
-      existingCart.push(newItem)
+      existingCart.push(newItem);
     }
 
-    localStorage.setItem("cart", JSON.stringify(existingCart))
+    localStorage.setItem("cart", JSON.stringify(existingCart));
+    
+    window.dispatchEvent(new Event("cartChanged"));
 
+    setCartUpdated(true);
+    
     toast.success("🛒 Sản phẩm đã được thêm vào giỏ hàng!", {
       position: "top-right"
-    })
-  }
+    });
+    
+    setTimeout(() => {
+      setCartUpdated(false);
+    }, 500);
+  };
 
   if (isLoading) {
     return (
@@ -245,30 +273,52 @@ const ProductPage = ({
       <p className="text-2xl font-bold ">{t("productPage.category")}</p>
       <CategorySlider categories={category?.categories} />
       <BannerSlide />
-      <Card/>
+      <Card />
       <div className="flex space-x-2 mb-2">
         <div className="w-3 h-7 bg-red-700 rounded-[5px]"></div>
         <p className="content-center text-sm text-red-600">
           {t("productPage.ourProduct")}
         </p>
       </div>
-      <NewProductsComponent products={data?.products} handleAddToCart={handleAddToCart} />
+      <NewProductsComponent 
+        products={data?.products}
+        onAddToCart={handleAddToCart}
+      />
       <h2 className="text-2xl font-bold mb-12 text-green-500">{t("productPage.explore")}</h2>
-      <Sort handleSortChange={handleSortChange} sortOption={sortOption}/>
+      <Sort handleSortChange={handleSortChange} sortOption={sortOption} />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-        {productsToShow.map((product) => (
-          <div
-            key={product._id}
-            className="bg-white p-3 border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-          >
-            <div className="aspect-w-1 aspect-h-1 w-full">
-              <img
-                crossOrigin="anonymous"
-                src={product.images[0]}
-                alt={product.name}
-                className="w-full h-full md:h-48 object-cover"
-              />
-            </div>
+        {productsToShow.map((product) => {
+          // Check favorite status for each individual product
+          const isProductFavorite = isFavorite(product._id);
+          
+          return (
+            <div
+              key={product._id}
+              className="bg-white p-3 border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 relative"
+            >
+              <div className="absolute top-0 left-0 p-2 z-10">
+                <button
+                  onClick={() => {
+                    if (isProductFavorite) {
+                      removeFavorite(product._id);
+                    } else {
+                      addFavorite(product);
+                    }
+                  }}
+                  className="text-2xl focus:outline-none"
+                  title={isProductFavorite ? t("productPage.removeFavorite") : t("productPage.addFavorite")}
+                >
+                  {isProductFavorite ? "❤️" : "🤍"}
+                </button>
+              </div>
+              <div className="aspect-w-1 aspect-h-1 w-full">
+                <img
+                  crossOrigin="anonymous"
+                  src={product.images[0]}
+                  alt={product.name}
+                  className="w-full h-full md:h-48 object-cover"
+                />
+              </div>
               <p className="text-sm text-gray-500">{product.brand} | {Math.round(product.averageRating)}/5</p>
               <Link to={`/productdetail/${product._id}`}>
                 <h3 className="text-lg font-semibold text-gray-800 hover:text-orange-500 transition">
@@ -280,14 +330,15 @@ const ProductPage = ({
               </p>
               <div className="mt-3 flex justify-center max-w-md mx-auto">
                 <button
-                    onClick={() => handleAddToCart(product)}
-                    className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md text-sm sm:text-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white active:bg-orange-700 active:scale-95"
+                  onClick={() => handleAddToCart(product)}
+                  className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md text-sm sm:text-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white active:bg-orange-700 active:scale-95"
                 >
-                    {t("productPage.addToCart")}
+                  {t("productPage.addToCart")}
                 </button>
               </div>
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
       <div className="flex justify-center mt-6">
         <div className="flex space-x-2">
@@ -308,11 +359,14 @@ const ProductPage = ({
           )}
         </div>
       </div>
-      <BestSellingProducts products={data?.products}/>
+      <BestSellingProducts 
+        products={data?.products}
+        onAddToCart={handleAddToCart}
+      />
       <SupportSection />
     </div>
-  )
-}
+  );
+};
 
 const CategorySlider = ({ categories }) => {
   const settings = {
@@ -324,8 +378,8 @@ const CategorySlider = ({ categories }) => {
     arrows: true,
     autoplay: true,
     autoplaySpeed: 3000,
-    centerMode: true, // Optional: Set to true if you want centered slides
-    variableWidth: false, // Ensure consistent width for slides
+    centerMode: true,
+    variableWidth: false,
     slidesPerRow: 1,
     responsive: [
       {
@@ -360,56 +414,75 @@ const CategorySlider = ({ categories }) => {
   );
 };
 
-function BestSellingProducts({ products }) {
-  const { t } = useTranslation()
+function BestSellingProducts({ products, onAddToCart }) {
+  const { t } = useTranslation();
+  const { addFavorite, removeFavorite, isFavorite } = useFavoriteStore();
 
   const bestSelling = [...(products || [])]
     .sort((a, b) => b.sold - a.sold)
-    .slice(0, 8) 
+    .slice(0, 8);
 
   return (
     <div className="flex space-x-2 mb-2">
       <section>
         <h2 className="text-2xl font-bold mb-5 text-red-500">🔥 {t("productPage.bestSeller")}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {bestSelling?.map(product => (
-            <div
-            key={product._id}
-            className="bg-white p-3 border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-          >
-            <div className="aspect-w-1 aspect-h-1 w-full">
-              <img
-                crossOrigin="anonymous"
-                src={product.images[0]}
-                alt={product.name}
-                className="w-full h-full md:h-48 object-cover"
-              />
-            </div>
-              <p className="text-sm text-gray-500">{product.brand} || {Math.round(product.averageRating)}/5</p>
-              <Link to={`/productdetail/${product._id}`}>
-                <h3 className="text-lg font-semibold text-gray-800 hover:text-orange-500 transition">
-                  {product.name}
-                </h3>
-              </Link>
-              <p className="text-xl font-bold text-gray-900 mt-1">
-                {product.salePrice.toLocaleString()}₫
-              </p>
-              <p className="text-sm text-gray-500">{t("productPage.sold")}: {product.sold}</p>
-              <div className="mt-3 flex justify-center max-w-md mx-auto">
-                <button
-                    onClick={() => handleAddToCart(product)}
+          {bestSelling?.map(product => {
+            const isProductFavorite = isFavorite(product._id);
+            
+            return (
+              <div
+                key={product._id}
+                className="bg-white p-3 border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 relative"
+              >
+                <div className="absolute top-0 left-0 p-2 z-10">
+                  <button
+                    onClick={() => {
+                      if (isProductFavorite) {
+                        removeFavorite(product._id);
+                      } else {
+                        addFavorite(product);
+                      }
+                    }}
+                    className="text-2xl focus:outline-none"
+                    title={isProductFavorite ? t("productPage.removeFavorite") : t("productPage.addFavorite")}
+                  >
+                    {isProductFavorite ? "❤️" : "🤍"}
+                  </button>
+                </div>
+                <div className="aspect-w-1 aspect-h-1 w-full">
+                  <img
+                    crossOrigin="anonymous"
+                    src={product.images[0]}
+                    alt={product.name}
+                    className="w-full h-full md:h-48 object-cover"
+                  />
+                </div>
+                <p className="text-sm text-gray-500">{product.brand} || {Math.round(product.averageRating)}/5</p>
+                <Link to={`/productdetail/${product._id}`}>
+                  <h3 className="text-lg font-semibold text-gray-800 hover:text-orange-500 transition">
+                    {product.name}
+                  </h3>
+                </Link>
+                <p className="text-xl font-bold text-gray-900 mt-1">
+                  {product.salePrice.toLocaleString()}₫
+                </p>
+                <p className="text-sm text-gray-500">{t("productPage.sold")}: {product.sold}</p>
+                <div className="mt-3 flex justify-center max-w-md mx-auto">
+                  <button
+                    onClick={() => onAddToCart(product)}
                     className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md text-sm sm:text-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white active:bg-orange-700 active:scale-95"
-                >
+                  >
                     {t("productPage.addToCart")}
-                </button>
+                  </button>
+                </div>
               </div>
-          </div>
-          ))}
+            );
+          })}
         </div>
       </section>
     </div>
-  )
+  );
 }
 
-
-export default ProductPage
+export default ProductPage;

@@ -10,6 +10,7 @@
   "menu": {
     "signin": "Đăng nhập",
     "home": "Trang chủ",
+    "product": "Sản phẩm",
     "about": "Giới thiệu",
     "contact": "Liên hệ",
     "myaccount": "Tài khoản của tôi"
@@ -155,5 +156,20 @@
         "answer": "Chúng tôi có chính sách đổi trả trong vòng 7 ngày kể từ ngày nhận hàng."
       }
     ]
+  },
+  "search": {
+    "resultsFor": "Kết quả tìm kiếm cho",
+    "found": "Tìm thấy {{count}} sản phẩm",
+    "noResults": "Không tìm thấy sản phẩm nào",
+    "sortBy": "Sắp xếp theo",
+    "sortDefault": "Mặc định",
+    "priceLowToHigh": "Giá: Thấp đến Cao",
+    "priceHighToLow": "Giá: Cao đến Thấp",
+    "nameAZ": "Tên: A-Z",
+    "nameZA": "Tên: Z-A",
+    "newest": "Mới nhất",
+    "error": "Đã xảy ra lỗi khi tìm kiếm sản phẩm",
+    "tryAgain": "Thử lại",
+    "tryDifferent": "Thử từ khóa tìm kiếm khác"
   }
 }

@@ -10,6 +10,7 @@
   "menu": {
     "signin": "Sign In",
     "home": "Home",
+    "product": "Products",
     "about": "About",
     "contact": "Contact",
     "myaccount": "My Account"
@@ -155,5 +156,28 @@
         "answer": "We have a return policy within 7 days from the date of receipt."
       }
     ]
+  },
+  "wishlist":{
+    "title": "My WishList",
+    "empty": "Wishlist Empty",
+    "emptyMessage": "Your wishlist is empty",
+    "continueShopping" : "Continue Shopping",
+    "clearAll": "Remove Wishlist"
+  },
+  "search": {
+    "resultsFor": "Search results for",
+    "found": "Found {{count}} products",
+    "noResults": "No products found",
+    "sortBy": "Sort by",
+    "sortDefault": "Default",
+    "priceLowToHigh": "Price: Low to High",
+    "priceHighToLow": "Price: High to Low",
+    "nameAZ": "Name: A-Z",
+    "nameZA": "Name: Z-A",
+    "newest": "Newest first",
+    "error": "An error occurred while fetching search results",
+    "tryAgain": "Try again",
+    "tryDifferent": "Try a different search term"
   }
 }
+
