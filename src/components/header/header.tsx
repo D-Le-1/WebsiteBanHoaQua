@@ -12,7 +12,7 @@ import Search from "./headerComponent/Search"
 
 const Header: React.FC = () => {
   const { i18n } = useTranslation()
-  const [currentLanguage, setCurrentLanguage] = useState("en")
+  const [currentLanguage, setCurrentLanguage] = useState("vi")
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const changeLanguage = (lang: string) => {
     i18n.changeLanguage(lang)
@@ -21,53 +21,22 @@ const Header: React.FC = () => {
   }
 
   return (
-    <header>
+    <header className="sticky top-0 z-50">
       {/* Top Banner */}
-      <div className="flex justify-around bg-gradient-to-tl from-lime-200 to-emerald-300 text-black text-center py-4 text-sm">
-        <div>
-          Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!{" "}
-          <span className="font-bold cursor-pointer ml-2">ShopNow</span>
-        </div>
-        <div>
-          <button
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center space-x-1"
-          >
-            <span>{currentLanguage}</span>
-            <span>▼</span>
-          </button>
-          {dropdownOpen && (
-            <div className="absolute right-0 sm:right-10 md:right-10 lg:right-72 bg-white shadow-md mt-2 rounded w-24 z-20">
-              <p
-                className="p-2 cursor-pointer hover:bg-gray-200"
-                onClick={() => changeLanguage("en")}
-              >
-                English
-              </p>
-              <p
-                className="p-2 cursor-pointer hover:bg-gray-200"
-                onClick={() => changeLanguage("vi")}
-              >
-                Vietnamese
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
       <div>
         {/* Navbar */}
-        <nav className="flex justify-between space-x-5 items-center px-8 py-4 shadow-md bg-orange-100">
+        <nav className="flex justify-between space-x-5 items-center px-8 py-2 shadow-md bg-gradient-to-tr from-orange-400 to-orange-200">
           {/* Logo */}
           <Link
             to="/"
-            className="text-2xl justify-center items-center flex ml-16"
+            className="text-3xl justify-center items-center flex ml-16"
           >
             <img
               className="w-16 h-16"
               src="/images/LogoShop.png"
               alt="logo"
             />
-            <p className="text-md font-bold text-emerald-400 font-mono">
+            <p className="font-bold text-white font-mono">
               FreshFruit
             </p>
           </Link>
@@ -75,6 +44,31 @@ const Header: React.FC = () => {
           {/* Menu */}
           <Menu />
 
+           <div>
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="flex items-center space-x-1"
+              >
+                <span>{currentLanguage}</span>
+                <span>▼</span>
+              </button>
+              {dropdownOpen && (
+                <div className="absolute right-28 sm:right-80 md:right-[450px] lg:right-[650px] bg-white shadow-md mt-2 rounded w-24 z-20">
+                  <p
+                    className="p-2 cursor-pointer hover:bg-gray-200"
+                    onClick={() => changeLanguage("en")}
+                  >
+                    English
+                  </p>
+                  <p
+                    className="p-2 cursor-pointer hover:bg-gray-200"
+                    onClick={() => changeLanguage("vi")}
+                  >
+                    Vietnamese
+                  </p>
+                </div>
+              )}
+          </div>
           {/* Search & Icons */}
           <Search />
         </nav>

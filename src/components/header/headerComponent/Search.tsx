@@ -109,7 +109,7 @@ const Search = () => {
               <>
                 {displayProducts.map((product) => (
                   <Link
-                    to={`/productdetail/${product.id}`}
+                    to={`/productdetail/${product._id}`}
                     key={product.id}
                     className="p-2 hover:bg-gray-200 flex items-center space-x-4 text-sm"
                     onClick={() => setSearchItem("")}

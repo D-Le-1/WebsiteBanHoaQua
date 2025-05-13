@@ -44,7 +44,7 @@ const Menu = () => {
           )}
         </svg>
       </button>
-      <ul className="hidden lg:flex space-x-6 text-gray-600 font-medium">
+      <ul className="hidden lg:flex space-x-6 text-gray-600 text-md font-medium">
         <li><Link to="/">{t("menu.home")}</Link></li>
         <li><Link to="/products">{t("menu.product")}</Link></li>
         <li><Link to="/contact">{t("menu.contact")}</Link></li>

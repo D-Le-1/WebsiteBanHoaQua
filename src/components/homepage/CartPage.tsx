@@ -21,6 +21,7 @@ const CartPage = () => {
   const [total, setTotal] = useState(0)
   const [user, setUser] = useState<number>(null)
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem("user"))
@@ -72,10 +73,10 @@ const CartPage = () => {
         <Table>
           <TableHead>
             <TableRow sx={{ backgroundColor: "#6cdc26" }}>
-              <TableCell>Product</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Quantity</TableCell>
-              <TableCell>Subtotal</TableCell>
+              <TableCell>{t("cart.product")}</TableCell>
+              <TableCell>{t("cart.price")}</TableCell>
+              <TableCell>{t("cart.quantity")}</TableCell>
+              <TableCell>{t("cart.subtotal")}</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -85,7 +86,7 @@ const CartPage = () => {
                 <TableCell></TableCell>
                 <TableCell></TableCell>
                 <TableCell className="text-center text-gray-500">
-                  🛒 Giỏ hàng của bạn đang trống.
+                  🛒 {t("cart.empty")}.
                 </TableCell>
               </TableRow>
                 ) : (
@@ -128,32 +129,32 @@ const CartPage = () => {
       </TableContainer>
       <div className="flex flex-col sm:flex-row justify-center items-center mt-6 gap-4 sm:gap-6">
         <Link to="/" className="w-full sm:w-auto px-4 py-2 border rounded-md font-bold text-black shadow-lg hover:bg-gray-100 transition-colors text-center">
-          Return To Shop
+          {t("cart.return")}
         </Link>
       </div>
       <div className="flex flex-col items-center justify-between md:flex-row gap-10">
         <div className="space-x-5 flex">
           <input
             type="text"
-            placeholder="Coupon Code"
+            placeholder={t("cart.coupon_code")}
             className="w-64 h-12 p-5 rounded-md border"
           />
           <button className="bg-red-400 w-44 h-12 rounded-md text-white">
-            Apply Coupon
+            {t("cart.apply_coupon")}
           </button>
         </div>
         <div className="w-full max-w-md p-4 space-y-4 border rounded-md border-black md:max-w-lg">
-          <h2 className="text-lg font-bold md:text-xl">Cart Total</h2>
+          <h2 className="text-lg font-bold md:text-xl">{t("cart.cart_total")}</h2>
           <div className="flex justify-between items-center border-b border-black pb-2">
-            <span>Subtotal:</span>
+            <span>{t("cart.subtotal")}:</span>
             <span>{Math.round(subtotal)}₫</span>
           </div>
           <div className="flex justify-between items-center border-b border-black pb-2">
-            <span>Shipping:</span>
+            <span>{t("cart.shipping")}:</span>
             <span>Free</span>
           </div>
           <div className="flex justify-between items-center border-b border-black pb-2">
-            <span>Total:</span>
+            <span>{t("cart.total")}:</span>
             <span>{Math.round(total)}₫</span>
           </div>
           <div className="flex justify-center">
@@ -161,7 +162,7 @@ const CartPage = () => {
               onClick={() => navigate(user ? "/checkout" : "/login")}
               className="w-40 px-4 py-2 bg-red-400 rounded-md text-white text-sm hover:bg-red-500 transition-colors md:w-48"
             >
-              Proceed to Checkout
+              {t("cart.checkout")}
             </button>
           </div>
         </div>

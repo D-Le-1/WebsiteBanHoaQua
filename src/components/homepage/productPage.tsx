@@ -9,7 +9,10 @@ import "slick-carousel/slick/slick-theme.css";
 import { useCategory } from '../../useQuery/hooks/useCategory';
 import CategoryComponent from '../sidebar/categoryComponent';
 import { toast } from 'react-toastify';
+import { Button } from '@mui/material';
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import Sort from '../sidebar/sortComponent';
+import Pagination from '../sidebar/paginationComponent';
 
 const ProductList: React.FC = () => {
     const { t } = useTranslation();
@@ -17,12 +20,15 @@ const ProductList: React.FC = () => {
     const { data: category } = useCategory();
     const [selectedCategory, setSelectedCategory] = useState<string>("Tất cả");
     const [sortOption, setSortOption] = useState("default");
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, Infinity]);
     const [productsToShow, setProductsToShow] = useState<Product[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 12;
   
     const filteredProducts = data?.products.filter((product: Product) => {
-      return selectedCategory === "Tất cả" || product.categoryName === selectedCategory;
+      const categoryMatch = selectedCategory === "Tất cả" || product.categoryName === selectedCategory;
+      const priceMatch = product.salePrice >= priceRange[0] && product.salePrice <= priceRange[1];
+      return categoryMatch && priceMatch;
     });
   
     useEffect(() => {
@@ -58,6 +64,11 @@ const ProductList: React.FC = () => {
   
     const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       setSortOption(e.target.value);
+      setCurrentPage(1);
+    };
+  
+    const handlePriceRangeChange = (range: [number, number]) => {
+      setPriceRange(range);
       setCurrentPage(1);
     };
   
@@ -107,18 +118,21 @@ const ProductList: React.FC = () => {
       return <p className="text-center text-red-500">Có lỗi xảy ra khi tải dữ liệu.</p>;
     }
   
+    // Price range options
+    const priceRanges = [
+      { label: "Tất cả giá", value: [0, Infinity] },
+      { label: "Dưới 100.000₫", value: [0, 100000] },
+      { label: "100.000₫ - 500.000₫", value: [100000, 500000] },
+      { label: "500.000₫ - 1.000.000₫", value: [500000, 1000000] },
+      { label: "Trên 1.000.000₫", value: [1000000, Infinity] }
+    ];
+  
     return (
       <div className="container mx-auto p-4 space-y-5">
-        <p className="text-2xl font-bold">{t("productPage.category")}</p>
-        <CategorySlider categories={category?.categories} />
-        <div>
-          <BannerSlide />
-        </div>
-        {/* Sidebar */}
         <div className="flex flex-col md:flex-row">
           <div className="w-full h-full md:w-64 bg-white p-6 shadow-lg">
             <h2 className="text-xl font-bold mb-4 text-green-700 uppercase">Danh Mục Sản Phẩm</h2>
-            <ul className="space-y-2">
+            <ul className="space-y-2 mb-4">
               {["Tất cả", ...(category?.categories.map((cat: Category) => cat.name) || [])].map((categoryName: string) => (
                 <li key={categoryName} className="flex items-center">
                   <button
@@ -132,6 +146,33 @@ const ProductList: React.FC = () => {
                       (
                       {data?.products.filter(
                         (p: Product) => p.categoryName === categoryName || categoryName === "Tất cả"
+                      ).length}
+                      )
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+
+            <h2 className="text-xl font-bold mb-4 text-green-700 uppercase">Lọc Theo Giá</h2>
+            <ul className="space-y-2">
+              {priceRanges.map((range) => (
+                <li key={range.label} className="flex items-center">
+                  <button
+                    className={`w-full text-left p-2 rounded text-gray-700 hover:bg-gray-200 ${
+                      priceRange[0] === range.value[0] && priceRange[1] === range.value[1] 
+                        ? "font-bold" 
+                        : ""
+                    }`}
+                    onClick={() => handlePriceRangeChange(range.value as [number, number])}
+                  >
+                    {range.label}{" "}
+                    <span className="text-gray-400">
+                      (
+                      {data?.products.filter(
+                        (p: Product) => 
+                          p.salePrice >= range.value[0] && 
+                          p.salePrice <= range.value[1]
                       ).length}
                       )
                     </span>
@@ -184,12 +225,15 @@ const ProductList: React.FC = () => {
                       </p>
                     </div>
                     <div className="mt-3 flex justify-center max-w-md mx-auto">
-                      <button
+                      <Button
+                        variant="outlined"
+                        color="warning"
+                        startIcon={<AddShoppingCartIcon />}
                         onClick={() => handleAddToCart(product)}
-                        className="bg-green-600 w-full h-10 text-white px-3 py-1 rounded-md text-sm sm:text-md transition-all duration-500 ease-in-out hover:bg-green-700 active:bg-green-800 active:scale-95"
+                        className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white active:bg-orange-700 active:scale-95"
                       >
-                        {t("productPage.addToCart")}
-                      </button>
+                        <span className="text-xs">{t("productPage.addToCart")}</span>
+                      </Button>
                     </div>
                   </div>
                 );
@@ -200,71 +244,15 @@ const ProductList: React.FC = () => {
             )}
           </div>
         </div>
-        <div className="flex justify-center mt-6">
-          <div className="flex space-x-2">
-            {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-              (pageNumber) => (
-                <button
-                  key={pageNumber}
-                  onClick={() => handlePageChange(pageNumber)}
-                  className={`py-2 px-4 rounded-full ${
-                    pageNumber === currentPage
-                      ? "bg-red-500 text-white"
-                      : "bg-gray-300 text-black"
-                  }`}
-                >
-                  {pageNumber}
-                </button>
-              )
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
- const CategorySlider = ({ categories }) => {
-    const settings = {
-      dots: false,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 7,
-      slidesToScroll: 1,
-      arrows: true,
-      autoplay: true,
-      autoplaySpeed: 3000,
-      centerMode: true, // Optional: Set to true if you want centered slides
-      variableWidth: false, // Ensure consistent width for slides
-      slidesPerRow: 1,
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 3,
-            slidesToScroll: 1,
-          },
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1,
-          },
-        },
-      ],
-    };
-  
-    return (
-      <div className="p-2">
-        <Slider {...settings}>
-          {categories?.map((category) => (
-            <div key={category.name} className="px-12">
-              <Link to={`/category/${category.name}`} className="block">
-                <CategoryComponent name={category.name} />
-              </Link>
-            </div>
-          ))}
-        </Slider>
+        
+        {/* Pagination */}
+        {totalPages > 0 && (
+          <Pagination 
+            currentPage={currentPage} 
+            totalPages={totalPages} 
+            onPageChange={handlePageChange} 
+          />
+        )}
       </div>
     );
   };

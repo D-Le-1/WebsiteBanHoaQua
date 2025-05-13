@@ -7,6 +7,9 @@ import CategoryComponent from '../sidebar/categoryComponent';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { Button } from '@mui/material';
+import { toast } from 'react-toastify';
 import { useProductwithCate } from '../../useQuery/hooks/useProductwithCate';
 import Sort from '../sidebar/sortComponent';
 
@@ -122,7 +125,7 @@ const CategoryPage = () => {
                                 className="w-full h-48 object-cover"
                               />
                             </div>
-                                <p className="text-sm text-gray-500">{product.brand} || {product.averageRating}/5</p>
+                                <p className="text-sm text-gray-500">{product.brand} || {Math.round(product.averageRating)}/5</p>
                                 <Link to={`/productdetail/${product._id}`}>
                                 <h3 className="text-lg font-semibold text-gray-800 hover:text-orange-500 transition">
                                   {product.name}
@@ -132,12 +135,15 @@ const CategoryPage = () => {
                                     {product.salePrice.toLocaleString()}₫
                                 </p>
                                 <div className="mt-3 flex justify-center">
-                                    <button
-                                        onClick={() => handleAddToCart(product)}
-                                        className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md text-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white"
-                                    >
-                                        {t("productPage.addToCart")}
-                                    </button>
+                                  <Button
+                                    variant="outlined"
+                                    color="warning"
+                                    startIcon={<AddShoppingCartIcon />}
+                                    onClick={() => handleAddToCart(product)}
+                                    className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white active:bg-orange-700 active:scale-95"
+                                  >
+                                    <span className="text-xs">{t("productPage.addToCart")}</span>
+                                  </Button>
                             </div>
                         </div>
                     ))}

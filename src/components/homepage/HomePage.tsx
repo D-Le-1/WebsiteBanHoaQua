@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useCategory } from "../../useQuery/hooks/useCategory";
 import Slider from "react-slick";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import BannerSlide from "../rating/BannerSlide";
@@ -13,6 +14,7 @@ import CategoryComponent from "../sidebar/categoryComponent";
 import Sort from "../sidebar/sortComponent";
 import dayjs from "dayjs";
 import useFavoriteStore from "../../zustand/store/wishListStore";
+import { Button } from "@mui/material";
 
 const Card = () => {
   const { t } = useTranslation();
@@ -106,7 +108,7 @@ function NewProductsComponent({ products, onAddToCart }) {
                   />
                 </div>
                 <p className="text-sm text-gray-500">{product.brand} || {Math.round(product.averageRating)}/5</p>
-                <Link to={`/productdetail/${product._id}`}>
+                <Link to={`/productdetail/${product._id}`} state={{ scrollToTop: true }}>
                   <h3 className="text-lg font-semibold text-gray-800 hover:text-orange-500 transition">
                     {product.name}
                   </h3>
@@ -115,12 +117,15 @@ function NewProductsComponent({ products, onAddToCart }) {
                   {product.salePrice.toLocaleString()}₫
                 </p>
                 <div className="mt-3 flex justify-center max-w-md mx-auto">
-                  <button
+                  <Button
+                    variant="outlined"
+                    color="warning"
+                    startIcon={<AddShoppingCartIcon />}
                     onClick={() => onAddToCart(product)}
-                    className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md text-sm sm:text-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white active:bg-orange-700 active:scale-95"
+                    className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white active:bg-orange-700 active:scale-95"
                   >
-                    {t("productPage.addToCart")}
-                  </button>
+                    <span className="text-xs">{t("productPage.addToCart")}</span>
+                  </Button>
                 </div>
               </div>
             );
@@ -270,8 +275,8 @@ const ProductPage = () => {
 
   return (
     <div className="container mx-auto p-4 space-y-5">
-      <p className="text-2xl font-bold ">{t("productPage.category")}</p>
-      <CategorySlider categories={category?.categories} />
+      {/* <p className="text-2xl font-bold ">{t("productPage.category")}</p> */}
+      {/* <CategorySlider categories={category?.categories} /> */}
       <BannerSlide />
       <Card />
       <div className="flex space-x-2 mb-2">
@@ -320,7 +325,7 @@ const ProductPage = () => {
                 />
               </div>
               <p className="text-sm text-gray-500">{product.brand} | {Math.round(product.averageRating)}/5</p>
-              <Link to={`/productdetail/${product._id}`}>
+              <Link to={`/productdetail/${product._id}`} state={{ scrollToTop: true }}>
                 <h3 className="text-lg font-semibold text-gray-800 hover:text-orange-500 transition">
                   {product.name}
                 </h3>
@@ -329,12 +334,15 @@ const ProductPage = () => {
                 {product.salePrice.toLocaleString()}₫
               </p>
               <div className="mt-3 flex justify-center max-w-md mx-auto">
-                <button
+                <Button
+                  variant="outlined"
+                  color="warning"
+                  startIcon={<AddShoppingCartIcon />}
                   onClick={() => handleAddToCart(product)}
-                  className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md text-sm sm:text-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white active:bg-orange-700 active:scale-95"
+                  className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white active:bg-orange-700 active:scale-95"
                 >
-                  {t("productPage.addToCart")}
-                </button>
+                  <span className="text-xs">{t("productPage.addToCart")}</span>
+                </Button>
               </div>
             </div>
           );
@@ -459,7 +467,7 @@ function BestSellingProducts({ products, onAddToCart }) {
                   />
                 </div>
                 <p className="text-sm text-gray-500">{product.brand} || {Math.round(product.averageRating)}/5</p>
-                <Link to={`/productdetail/${product._id}`}>
+                <Link to={`/productdetail/${product._id}`} state={{ scrollToTop: true }}>
                   <h3 className="text-lg font-semibold text-gray-800 hover:text-orange-500 transition">
                     {product.name}
                   </h3>
@@ -469,12 +477,15 @@ function BestSellingProducts({ products, onAddToCart }) {
                 </p>
                 <p className="text-sm text-gray-500">{t("productPage.sold")}: {product.sold}</p>
                 <div className="mt-3 flex justify-center max-w-md mx-auto">
-                  <button
+                  <Button
+                    variant="outlined"
+                    color="warning"
+                    startIcon={<AddShoppingCartIcon />}
                     onClick={() => onAddToCart(product)}
-                    className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md text-sm sm:text-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white active:bg-orange-700 active:scale-95"
+                    className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white active:bg-orange-700 active:scale-95"
                   >
-                    {t("productPage.addToCart")}
-                  </button>
+                    <span className="text-xs">{t("productPage.addToCart")}</span>
+                  </Button>
                 </div>
               </div>
             );

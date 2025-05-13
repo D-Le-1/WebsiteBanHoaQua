@@ -8,7 +8,7 @@ function BannerSlide() {
   const slides = [
     {
       id: 1,
-      image: "https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/468406482_597828942774050_7177994008916388013_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=UXDgZ9LnVvQQ7kNvwHD7ZoC&_nc_oc=Admmk73fdVnAeDd1YXHFRgqx9TUiZXYNlT9Y2Br9NeK7QjJX7dWQKziiIl83dUNvn516ef93XfVldJPbRSODNWqa&_nc_zt=23&_nc_ht=scontent.fhan14-1.fna&_nc_gid=e7qZEmjpDlzaStTkP1csyw&oh=00_AfF3jNULxxEHbuG9PX8LdXm1FNBVJeYbAC2mBUt79TEf5Q&oe=680D273C",
+      image: "https://freshfruitfarm.vn/uploads/images/2022/03/1646204506-single_banner49-banner3.jpg",
       title: "Slide 1"
     },
     {

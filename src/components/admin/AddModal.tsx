@@ -5,10 +5,12 @@ import Stack from "@mui/material/Stack"
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { createProduct } from "../../useQuery/api/api"
+import { useCategory } from "../../useQuery/hooks/useCategory"
 import { toast } from "react-toastify"
 
 const AddModal = ({ setOpenModalAdd }) => {
   const queryClient = useQueryClient()
+  const { data: categories } = useCategory()
   const [formData, setFormData] = useState({
     name: "",
     importPrice: "",
@@ -158,13 +160,19 @@ const AddModal = ({ setOpenModalAdd }) => {
         <label className="block mb-2 mt-2">
           Danh mục: <span className="text-red-500">*</span>
         </label>
-        <input
-          type="text"
+        <select
           name="categoryName"
           value={formData.categoryName}
           onChange={handleChange}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-        />
+        >
+          <option value="">Chọn danh mục</option>
+          {categories?.categories.map((category) => (
+            <option key={category._id} value={category.name}>
+              {category.name}
+            </option>
+          ))}  
+        </select>
 
         <label className="block mb-2 mt-2">Thương hiệu:</label>
         <input

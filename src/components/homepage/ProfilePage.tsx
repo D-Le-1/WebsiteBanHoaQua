@@ -3,10 +3,12 @@ import Sidebar from "../sidebar/sideBar";
 import { editProfile } from "../../useQuery/api/api";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const ProfilePage: React.FC = () => {
   const [user, setUser] = useState(null); // Khởi tạo user là null
   const [openModal, setOpenModal] = useState(false);
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     avatar: null,
     avatarPreview: "",
@@ -132,7 +134,7 @@ const ProfilePage: React.FC = () => {
       </div>
       <div className="flex space-x-44">
         <Sidebar />
-        <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+        <div className="bg-white p-6 rounded-lg justify-center shadow-lg h-full w-full">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
               <img
@@ -150,22 +152,22 @@ const ProfilePage: React.FC = () => {
           </div>
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <label className="text-gray-600">Name</label>
+              <label className="text-gray-600">{t("my_account.profile.name")}</label>
               <p className="text-gray-800">{user?.name || "N/A"}</p>
             </div>
             <hr className="border-gray-200" />
             <div className="flex justify-between items-center">
-              <label className="text-gray-600">Email account</label>
+              <label className="text-gray-600">{t("my_account.profile.email")}</label>
               <p className="text-gray-800">{user?.email || "N/A"}</p>
             </div>
             <hr className="border-gray-200" />
             <div className="flex justify-between items-center">
-              <label className="text-gray-600">Mobile number</label>
+              <label className="text-gray-600">{t("my_account.profile.phone")}</label>
               <p className="text-gray-800">{user?.phone || "N/A"}</p>
             </div>
             <hr className="border-gray-200" />
             <div className="flex justify-between items-center">
-              <label className="text-gray-600">Location</label>
+              <label className="text-gray-600">{t("my_account.profile.address")}</label>
               <p className="text-gray-800">{user?.address || "N/A"}</p>
             </div>
           </div>
@@ -174,13 +176,13 @@ const ProfilePage: React.FC = () => {
               onClick={() => setOpenModal(true)}
               className="mt-6 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
             >
-              Change profile
+              {t("my_account.profile.changeProfile")}
             </button>
           </div>
           {openModal && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
               <div className="bg-white p-6 rounded-lg w-1/3">
-                <h2 className="text-xl font-bold mb-4">Change Profile</h2>
+                <h2 className="text-xl font-bold mb-4">{t("my_account.profile.changeProfile")}</h2>
                 <form onSubmit={handleUpdateProfile}>
                   <div className="space-y-4">
                     <div>
@@ -204,7 +206,7 @@ const ProfilePage: React.FC = () => {
                     </div>
                     <div>
                       <label className="block mb-2">
-                        Name: <span className="text-red-500">*</span>
+                        {t("my_account.profile.name")}: <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -216,7 +218,7 @@ const ProfilePage: React.FC = () => {
                     </div>
                     <div>
                       <label className="block mb-2">
-                        Phone: <span className="text-red-500">*</span>
+                        {t("my_account.profile.phone")}: <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -228,7 +230,7 @@ const ProfilePage: React.FC = () => {
                     </div>
                     <div>
                       <label className="block mb-2">
-                        Address: <span className="text-red-500">*</span>
+                        {t("my_account.profile.address")}: <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"

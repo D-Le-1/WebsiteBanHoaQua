@@ -14,8 +14,10 @@ import { useProduct } from "../../useQuery/hooks/useProduct"
 import { Link } from "react-router-dom"
 import ReviewSystem from "../rating/reviewComponent"
 import { useGetListReview } from "../../useQuery/hooks/useGetListReview"
+import {useScrollToTop} from "../../useQuery/hooks/useScrollToTop"
 
 const DetailPage = () => {
+  useScrollToTop();
   const { id } = useParams<{ id: string }>()
   const { data, isLoading, isError, error } = useProductDetail(id)
   const [user, setUser] = useState(null)
@@ -57,6 +59,8 @@ const DetailPage = () => {
     }
 
     localStorage.setItem("cart", JSON.stringify(updatedCart))
+
+    window.dispatchEvent(new Event("cartChanged"));
 
     toast.success("🛒 Sản phẩm đã được thêm vào giỏ hàng!", {
       position: "top-right"

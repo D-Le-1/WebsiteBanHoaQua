@@ -171,5 +171,91 @@
     "error": "Đã xảy ra lỗi khi tìm kiếm sản phẩm",
     "tryAgain": "Thử lại",
     "tryDifferent": "Thử từ khóa tìm kiếm khác"
+  },
+  "about":{
+    "title": "Giới thiệu về FreshFruit Shop",
+    "who_we_are": {
+      "emoji": "🍊",
+      "title": "Chúng tôi là ai?",
+      "description": "FreshFruit Shop là cửa hàng chuyên cung cấp các loại trái cây tươi ngon, đảm bảo chất lượng và nguồn gốc rõ ràng. Chúng tôi luôn đặt sức khỏe của khách hàng lên hàng đầu, mang đến những sản phẩm giàu dinh dưỡng và an toàn vệ sinh thực phẩm."
+    },
+    "mission": {
+      "emoji": "🎯",
+      "title": "Sứ mệnh của chúng tôi",
+      "description": "Sứ mệnh của FreshFruit Shop là kết nối nông sản Việt với người tiêu dùng, mang lại nguồn thực phẩm sạch, tươi mới và đáng tin cậy. Chúng tôi cam kết xây dựng một hệ sinh thái bền vững giữa nông dân, khách hàng và môi trường."
+    },
+    "products": {
+      "emoji": "🛒",
+      "title": "Sản phẩm của chúng tôi",
+      "items": [
+        "Các loại trái cây theo mùa: cam, quýt, bưởi, xoài, vải, nhãn…",
+        "Trái cây nhập khẩu cao cấp: táo Mỹ, nho Úc, kiwi New Zealand…",
+        "Hộp quà trái cây sang trọng cho dịp lễ, tết, sinh nhật…"
+      ]
+    },
+    "thanks": {
+      "emoji": "🤝",
+      "title": "Cảm ơn bạn đã đồng hành!",
+      "description": "FreshFruit Shop rất hân hạnh được phục vụ bạn. Hãy ghé thăm cửa hàng hoặc đặt hàng online để trải nghiệm trái cây tươi sạch mỗi ngày!"
+    }
+  },
+  "cart":{
+    "product": "Sản phẩm",
+    "price": "Giá",
+    "quantity": "Số lượng",
+    "total": "Tổng cộng",
+    "cart_total": "Tổng giỏ hàng",
+    "subtotal": "Giá tạm tính",
+    "shipping": "Phí vận chuyển",
+    "delete": "Xóa",
+    "empty": "Giỏ hàng của bạn đang trống",
+    "continueShopping": "Tiếp tục mua sắm",
+    "checkout": "Thanh toán",
+    "return": "Quay lại cửa hàng",
+    "apply_coupon": "Áp dụng mã giảm giá",
+    "coupon_code": "Mã giảm giá"
+  },
+  "checkout":{
+    "billing_details":"Thông tin thanh toán",
+    "name":"Họ và tên",
+    "email":"Email",
+    "phone":"Số điện thoại",
+    "address":"Địa chỉ",
+    "city":"Thành phố",
+    "order_summary":"Tóm tắt đơn hàng",
+    "cod":"COD",
+    "place_order":"Đặt hàng"
+  },
+  "my_account":{
+    "title": "Tài khoản của tôi",
+    "manager": "QUẢN LÝ TÀI KHOẢN CỦA TÔI",
+    "profile": {
+      "title": "Hồ sơ của tôi",
+      "name": "Tên",
+      "email": "Email tài khoản",
+      "phone": "Số điện thoại",
+      "address": "Địa chỉ",
+      "changeProfile": "Thay đổi hồ sơ"
+    },
+    "orders": {
+      "title": "Đơn hàng của tôi",
+      "name": "Tên",
+      "address": "Địa chỉ",
+      "phone": "Số điện thoại",
+      "status": "Trạng thái",
+      "email": "Email",
+      "totalPrice": "Tổng giá",
+      "product": "Sản phẩm",
+      "paymentMethod": "Phương thức thanh toán",
+      "action": "Hành động"
+    },
+    "wishlist": {
+      "title": "Danh sách yêu thích",
+      "total_remaining": "Tổng số còn lại",
+      "item_in_wl": "Sản phẩm trong danh sách yêu thích",
+      "purchase": "Đã mua"
+    },
+    "settings": "Cài đặt",
+    "logout": "Đăng xuất"
   }
 }

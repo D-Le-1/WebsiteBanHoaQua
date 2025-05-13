@@ -178,6 +178,92 @@
     "error": "An error occurred while fetching search results",
     "tryAgain": "Try again",
     "tryDifferent": "Try a different search term"
+  },
+  "about":{
+    "title": "Introduction to FreshFruit Shop",
+    "who_we_are": {
+      "emoji": "🍊",
+      "title": "Who are we?",
+      "description": "FreshFruit Shop is a store specializing in providing fresh, delicious fruits with guaranteed quality and clear origins. We always prioritize our customers' health, offering nutritious products that meet food safety standards."
+    },
+    "mission": {
+      "emoji": "🎯",
+      "title": "Our mission",
+      "description": "FreshFruit Shop’s mission is to connect Vietnamese agricultural products with consumers, delivering clean, fresh, and reliable food sources. We are committed to building a sustainable ecosystem among farmers, customers, and the environment."
+    },
+    "products": {
+      "emoji": "🛒",
+      "title": "Our products",
+      "items": [
+        "Seasonal fruits: oranges, tangerines, pomelos, mangoes, lychees, longans…",
+        "Premium imported fruits: American apples, Australian grapes, New Zealand kiwis…",
+        "Luxury fruit gift boxes for holidays, Tet, birthdays…"
+      ]
+    },
+    "thanks": {
+      "emoji": "🤝",
+      "title": "Thank you for joining us!",
+      "description": "FreshFruit Shop is honored to serve you. Visit our store or order online to experience fresh, clean fruits every day!"
+    }
+  },
+  "cart":{
+    "product": "Product",
+    "price": "Price",
+    "quantity": "Quantity",
+    "total": "Total",
+    "cart_total": "Cart Total",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "delete": "Delete",
+    "empty": "Your cart is empty",
+    "continueShopping": "Continue Shopping",
+    "checkout": "Checkout",
+    "return": "Return to shop",
+    "apply_coupon": "Apply coupon",
+    "coupon_code": "Coupon code"
+  },
+  "checkout":{
+    "billing_details":"Billing Details",
+    "name":"Full Name",
+    "email":"Email",
+    "phone":"Phone Number",
+    "address":"Address",
+    "city":"City",
+    "order_summary":"Order Summary",
+    "cod":"COD",
+    "place_order":"Place Order"
+  },
+  "my_account":{
+    "title": "My Account",
+    "manager": "MANAGER MY ACCOUNT",
+    "profile": {
+      "title": "My Profile",
+      "name": "Name",
+      "email": "Email Account",
+      "phone": "Phone Number",
+      "address": "Address",
+      "changeProfile": "Change Profile"
+    },
+    "orders": {
+      "title": "My Orders",
+      "name": "Name",
+      "address": "Address",
+      "phone": "Phone Number",
+      "status": "Status",
+      "email": "Email",
+      "totalPrice": "Total Price",
+      "product": "Products",
+      "paymentMethod": "Payment Method",
+      "action": "Action"
+    },
+    "wishlist": {
+      "title": "My Wishlist",
+      "total_remaining": "Total remaining",
+      "item_in_wl": "Item in wishlist",
+      "purchase": "Purchased"
+    },
+    "settings": "Settings",
+    "logout": "Logout"
   }
 }
 

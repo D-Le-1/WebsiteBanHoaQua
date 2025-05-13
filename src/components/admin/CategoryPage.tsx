@@ -20,6 +20,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded"
 import { useParams } from "react-router-dom"
+import ConfirmDialog from "../sidebar/dialogComponent"
 
 const CategoryPage = () => {
   const { id } = useParams()
@@ -28,6 +29,8 @@ const CategoryPage = () => {
   const [openModal, setOpenModal] = useState(false)
   const [openModalUpdate, setOpenModalUpdate] = useState(false)
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     description:""
@@ -139,7 +142,10 @@ const CategoryPage = () => {
                           Edit
                         </Button>
                         <Button
-                          onClick={() => deleteHandle(category._id)}
+                          onClick={() => {
+                            setDeleteId(category._id);
+                            setOpenConfirmDialog(true);
+                          }}
                           variant="contained"
                           startIcon={<CloseRoundedIcon />}
                         >
@@ -198,6 +204,22 @@ const CategoryPage = () => {
         </div>
         )}
       </div>
+      <ConfirmDialog
+          open={openConfirmDialog}
+          title="Xác nhận xóa"
+          content="Bạn có chắc chắn muốn xóa danh mục này? Hành động này không thể hoàn tác."
+          onClose={() => {
+            setOpenConfirmDialog(false);
+            setDeleteId(null);
+          }}
+          onConfirm={() => {
+            if (deleteId) {
+              deleteHandle(deleteId);
+            }
+            setOpenConfirmDialog(false);
+            setDeleteId(null);
+          }}
+        />
     </div>
   )
 }

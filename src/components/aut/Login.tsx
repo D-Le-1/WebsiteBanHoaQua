@@ -44,9 +44,9 @@ const LoginPage = () => {
       {/* Hình ảnh bên trái */}
       <div className="hidden md:flex items-center">
         <img
-          src="images/a1c7dc5b68a42239311e510f54d8cd59.jpg"
+          src="/images/LogoShop.png"
           alt="Shopping"
-          className="w-[800px] h-[600px]"
+          className="w-full h-full object-cover"
         />
       </div>
 

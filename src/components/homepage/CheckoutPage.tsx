@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next"
 import { paymentMomo } from "../../useQuery/api/api"
 import { paymentVnpay } from "../../useQuery/api/api"
 
+
 const CheckOutPage = () => {
   const navigate = useNavigate()
   const { data, isLoading } = useCity()
@@ -18,6 +19,7 @@ const CheckOutPage = () => {
   const [selectedCoupon, setSelectedCoupon] = useState(null)
   const [discountAmount, setDiscountAmount] = useState(0)
   const { data: dataCoupon } = useCoupon()
+  const { t } = useTranslation()
   const [formData, setFormData] = useState({
     firstName: "",
     streetAddress: "",
@@ -208,8 +210,8 @@ const CheckOutPage = () => {
       </div>
       <div className="md:flex">
         <div className="space-y-2">
-          <h1 className="text-xl font-bold">Billing Details</h1>
-          <p className="text-zinc-400 text-sm">Name</p>
+          <h1 className="text-xl font-bold">{t("checkout.billing_details")}</h1>
+          <p className="text-zinc-400 text-sm">{t("checkout.name")}</p>
           <input
             type="text"
             className="w-96 h-12 p-2 shadow-md rounded-md"
@@ -219,9 +221,7 @@ const CheckOutPage = () => {
             value={formData.firstName}
             onChange={handleChange}
           />
-          <p className="text-zinc-400 text-sm">Company Name</p>
-          <input type="text" className="w-96 h-12 p-2 shadow-md rounded-md" />
-          <p className="text-zinc-400 text-sm">Street Address</p>
+          <p className="text-zinc-400 text-sm">{t("checkout.address")}</p>
           <input
             type="text"
             className="w-96 h-12 p-2 shadow-md rounded-md"
@@ -230,9 +230,7 @@ const CheckOutPage = () => {
             value={formData.streetAddress}
             onChange={handleChange}
           />
-          <p className="text-zinc-400 text-sm">Apartment, floor, etc</p>
-          <input type="text" className="w-96 h-12 p-2 shadow-md rounded-md" />
-          <p className="text-zinc-400 text-sm">Town/City</p>
+          <p className="text-zinc-400 text-sm">{t("checkout.city")}</p>
           <select
             className="w-96 h-12 p-2 shadow-md rounded-md"
             name="city"
@@ -244,7 +242,7 @@ const CheckOutPage = () => {
               <option>{city.name}</option>
             ))}
           </select>
-          <p className="text-zinc-400 text-sm">Phone Number</p>
+          <p className="text-zinc-400 text-sm">{t("checkout.phone")}</p>
           <input
             value={formData.phone}
             name="phone"
@@ -252,7 +250,7 @@ const CheckOutPage = () => {
             type="text"
             className="w-96 h-12 p-2 shadow-md rounded-md"
           />
-          <p className="text-zinc-400 text-sm">Email Address</p>
+          <p className="text-zinc-400 text-sm">{t("checkout.email")}</p>
           <input
             value={formData.email}
             onChange={handleChange}
@@ -269,7 +267,7 @@ const CheckOutPage = () => {
           </div>
         </div>
         <div className="max-w-xl w-full mx-auto p-6 bg-white shadow-lg rounded-lg">
-          <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+          <h2 className="text-xl font-semibold mb-4">{t("checkout.order_summary")}</h2>
           <div className="space-y-4">
             {cart.map((item) => (
               <div
@@ -290,15 +288,15 @@ const CheckOutPage = () => {
             ))}
             <hr />
             <div className="flex justify-between items-center">
-              <span>Subtotal:</span>
+              <span>{t("cart.subtotal")}:</span>
               <span className="font-medium">{Math.round(total)}₫</span>
             </div>
             <div className="flex justify-between items-center">
-              <span>Shipping:</span>
+              <span>{t("cart.shipping")}:</span>
               <span className="text-green-600">Free</span>
             </div>
             <div className="flex justify-between items-center font-semibold text-lg">
-              <span>Total:</span>
+              <span>{t("cart.total")}:</span>
               <span value={total}>{Math.round(total - discountAmount)}₫</span>
             </div>
             <hr />
@@ -309,7 +307,7 @@ const CheckOutPage = () => {
                   name="payment"
                   onChange={() => setPaymentMethod("COD")}
                 />
-                <span>COD</span>
+                <span>{t("checkout.cod")}</span>
               </label>
               <label className="flex items-center space-x-2 mt-2">
                 <input
@@ -350,7 +348,7 @@ const CheckOutPage = () => {
                 >
                   {couponMutation.isLoading
                     ? "Đang áp dụng..."
-                    : "Apply Coupon"}
+                    : t("cart.apply_coupon")}
                 </button>
               </div>
             </div>
@@ -359,7 +357,7 @@ const CheckOutPage = () => {
               disabled={mutation.isLoading}
               className="w-full bg-red-500 text-white py-2 rounded-md mt-4"
             >
-              {mutation.isLoading ? "Creating..." : "Place Order"}
+              {mutation.isLoading ? "Creating..." : t("checkout.place_order")}
             </button>
           </div>
         </div>
