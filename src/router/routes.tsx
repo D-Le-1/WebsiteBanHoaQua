@@ -24,6 +24,8 @@ import Dashboard from "../pages/Dashboard"
 import OrderDetailsAdmin from "../pages/OrderDetailsAdmin"
 import ProductPage from "../pages/ProductPage"
 import SearchPage from "../pages/SearchPage"
+import ForgotPage from "../pages/forgotPage"
+import ResetPage from "../pages/resetPage"
 
 export const routes: RouteObject[] = [
   {
@@ -148,6 +150,16 @@ export const routes: RouteObject[] = [
   {
     path:'/search',
     element:<SearchPage />,
+    children:[]
+  },
+  {
+    path:'/forgot',
+    element:<ForgotPage />,
+    children:[]
+  },
+  {
+    path:'/reset/',
+    element:<ResetPage />,
     children:[]
   }
 ]

@@ -403,3 +403,20 @@ export const likeReview = async (reviewId) => {
     throw error;
   }
 };
+
+export const forgotPassword = async (email) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/auth/forgot-password`, {
+      email
+    })
+    return response.data
+  } catch (error) {
+    console.error("Error sending forgot password email:", error)
+    throw error
+  }
+};
+
+export const resetPassword = async ({ email, code, password, confirmPassword }) => {
+  const response = await axios.post(`${API_BASE_URL}/auth/reset-password`, { email, code, password, confirmPassword });
+  return response.data;
+};

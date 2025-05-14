@@ -4,6 +4,7 @@ import { loginUser } from "../../useQuery/api/api"
 import { LoginResponse } from "../../useQuery/user/auth"
 import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { toast } from "react-toastify"
 
 const LoginPage = () => {
@@ -101,9 +102,9 @@ const LoginPage = () => {
             >
               {mutation.isLoading ? "Logging in...." : "Login"}
             </button>
-            <a href="#" className="text-red-500 hover:underline">
+            <Link to="/forgot" className="text-red-500 hover:underline">
               Forgot Password?
-            </a>
+            </Link>
           </div>
         </form>
       </div>

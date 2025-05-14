@@ -428,7 +428,7 @@ function BestSellingProducts({ products, onAddToCart }) {
 
   const bestSelling = [...(products || [])]
     .sort((a, b) => b.sold - a.sold)
-    .slice(0, 8);
+    .slice(0, 12);
 
   return (
     <div className="flex space-x-2 mb-2">

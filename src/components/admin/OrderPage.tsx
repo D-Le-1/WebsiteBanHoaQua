@@ -173,7 +173,7 @@ const OrderPage: React.FC = () => {
                           variant="contained"
                           color="primary"
                           className="transition-transform w-28 transform hover:scale-105"
-                          disabled={order.status === "delivered"}
+                          disabled={order.status === "delivered" || order.status === "cancelled"}
                         >
                           Cập nhật
                         </Button>
