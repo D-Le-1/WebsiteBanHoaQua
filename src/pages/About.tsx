@@ -1,7 +1,4 @@
 import { ReactElement } from "react"
-import Table from "../components/table/Table"
-import Header from "../components/header/header"
-import Footer from "../components/footer/Footer"
 import { useTranslation } from "react-i18next"
 
 

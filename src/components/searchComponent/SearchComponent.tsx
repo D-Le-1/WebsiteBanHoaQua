@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { searchName } from "../../useQuery/api/api";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import StarRating from "../sideComponent/RatingStar";
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
@@ -105,6 +106,35 @@ const SearchResults = () => {
     return pageNumbers;
   };
 
+  const handleAddToCart = (product: Product) => {
+        if (!product || !product._id) {
+          console.error("Product is undefined or missing _id");
+          return;
+        }
+    
+        const newItem: CartItem = { product, quantity: 1 };
+    
+        const existingCart: CartItem[] = JSON.parse(localStorage.getItem("cart") || "[]");
+    
+        const existingIndex = existingCart.findIndex(
+          (item) => item.product._id === product._id
+        );
+    
+        if (existingIndex >= 0) {
+          existingCart[existingIndex].quantity += 1;
+        } else {
+          existingCart.push(newItem);
+        }
+    
+        localStorage.setItem("cart", JSON.stringify(existingCart));
+  
+        window.dispatchEvent(new Event("cartChanged"));
+    
+        toast.success("🛒 Sản phẩm đã được thêm vào giỏ hàng!", {
+          position: "top-right",
+        });
+      };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
@@ -170,8 +200,7 @@ const SearchResults = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {displayedProducts.map((product) => (
-                <Link
-                  to={`/productdetail/${product._id}`}
+                <div
                   key={product.id}
                   className="group"
                 >
@@ -187,7 +216,8 @@ const SearchResults = () => {
                           className="w-full h-48 object-cover"
                         />
                       </div>
-                          <p className="text-sm text-gray-500">{product.brand} || {product.averageRating}/5</p>
+                          <p className="text-sm text-gray-500">{product.brand}</p>
+                          <StarRating averageRating={product.averageRating} />
                           <Link to={`/productdetail/${product._id}`}>
                           <h3 className="text-lg font-semibold text-gray-800 hover:text-orange-500 transition">
                             {product.name}
@@ -197,15 +227,15 @@ const SearchResults = () => {
                               {product.salePrice.toLocaleString()}₫
                           </p>
                           <div className="mt-3 flex justify-center">
-                              <button
-                                  onClick={() => handleAddToCart(product)}
-                                  className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md text-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white"
-                              >
-                                  {t("productPage.addToCart")}
-                              </button>
-                      </div>
+                            <button
+                                onClick={() => handleAddToCart(product)}
+                                className="bg-white w-full h-10 text-black px-3 py-1 border-2 rounded-md text-md transition-all duration-500 ease-in-out hover:bg-orange-600 hover:text-white"
+                            >
+                                {t("productPage.addToCart")}
+                            </button>
+                        </div>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           )}

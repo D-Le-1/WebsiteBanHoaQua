@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import QuantitySelector from "../rating/ButtonQuanti"
+import QuantitySelector from "../sideComponent/ButtonQuanti"
 import { Link, useNavigate } from "react-router-dom"
 import {
   Table,
@@ -59,6 +59,7 @@ const CartPage = () => {
     const updatedCart = cart.filter((item) => item.product._id !== id)
     setCart(updatedCart)
     localStorage.setItem("cart", JSON.stringify(updatedCart))
+    window.dispatchEvent(new Event("cartChanged"));
     toast.success("🗑️ Sản phẩm đã bị xóa khỏi giỏ hàng!", {
       position: "top-right"
     })

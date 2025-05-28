@@ -9,7 +9,13 @@ import {
   TableRow,
   Paper,
   Button,
-  Stack
+  Stack,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField,
+  Box
 } from "@mui/material"
 import { useOrder } from "../../useQuery/hooks/useOrder"
 import { Link } from "react-router-dom"
@@ -22,18 +28,22 @@ const OrderPage: React.FC = () => {
   const queryClient = useQueryClient()
   const { id } = useParams<{ id: number }>()
   const { data } = useOrder()
-  const [selectedOrder, setSelectedOrder] = useState<any>(null) // state cho sản phẩm được chọn
-  const [searchQuery, setSearchQuery] = useState("") // state cho tìm kiếm
+  const [selectedOrder, setSelectedOrder] = useState<any>(null)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [statusFilter, setStatusFilter] = useState<string>("all") // Thêm state cho bộ lọc trạng thái
   const [currentPage, setCurrentPage] = useState(1)
   const ordersPerPage = 6
 
   useEffect(() => {
     setCurrentPage(1)
-  }, [searchQuery])
+  }, [searchQuery, statusFilter]) // Reset trang khi thay đổi điều kiện tìm kiếm hoặc bộ lọc
 
-  const filteredOrders = data?.orders.filter((order) =>
-    order.name.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  // Lọc đơn hàng dựa trên từ khóa tìm kiếm và trạng thái
+  const filteredOrders = data?.orders.filter((order) => {
+    const matchesName = order.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === "all" || order.status === statusFilter;
+    return matchesName && matchesStatus;
+  });
 
   const indexOfLastOrder = currentPage * ordersPerPage
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage
@@ -52,26 +62,31 @@ const OrderPage: React.FC = () => {
       setCurrentPage(pageNumber)
     }
   }
-    const mutation = useMutation({
-      mutationFn: editStatus,
-      onSuccess: () => {
-        queryClient.invalidateQueries(["orders"]) // Làm mới danh sách
-        toast.success("Đã thay đổi trạng thái", { position: "top-right" })
-      }
-    })
 
-    const changeStatusHandle = (id: number, currentStatus: string) => {
-      const nextStatusMap: Record<string, string> = {
-        pending: "confirmed",
-        confirmed: "shipping",
-        shipping: "delivered",
-        delivered: "pending",
-      };
-    
-      const newStatus = nextStatusMap[currentStatus] || "pending";
-      mutation.mutate({ id, newStatus });
+  const mutation = useMutation({
+    mutationFn: editStatus,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["orders"]) // Làm mới danh sách
+      toast.success("Đã thay đổi trạng thái", { position: "top-right" })
+    }
+  })
+
+  const changeStatusHandle = (id: number, currentStatus: string) => {
+    const nextStatusMap: Record<string, string> = {
+      pending: "confirmed",
+      confirmed: "shipping",
+      shipping: "delivered",
+      delivered: "pending",
     };
-    
+  
+    const newStatus = nextStatusMap[currentStatus] || "pending";
+    mutation.mutate({ id, newStatus });
+  };
+
+  // Lấy danh sách các trạng thái có trong dữ liệu
+  const allStatuses = data?.orders 
+    ? Array.from(new Set(data.orders.map(order => order.status)))
+    : [];
 
   return (
     <div className="p-6">
@@ -79,6 +94,36 @@ const OrderPage: React.FC = () => {
         <SidebarAdmin />
         <div className="w-screen">
           <h1 className="text-2xl font-bold mb-4">List Order</h1>
+          
+          {/* Thêm bộ lọc và tìm kiếm */}
+          <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+            <TextField
+              label="Tìm kiếm theo tên"
+              variant="outlined"
+              size="small"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              sx={{ minWidth: 200 }}
+            />
+            
+            <FormControl size="small" sx={{ minWidth: 200 }}>
+              <InputLabel id="status-filter-label">Trạng thái</InputLabel>
+              <Select
+                labelId="status-filter-label"
+                value={statusFilter}
+                label="Trạng thái"
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                <MenuItem value="all">Tất cả</MenuItem>
+                {allStatuses.map((status) => (
+                  <MenuItem key={status} value={status}>
+                    {status}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+          
           <TableContainer component={Paper}>
             <Table>
               <TableHead>

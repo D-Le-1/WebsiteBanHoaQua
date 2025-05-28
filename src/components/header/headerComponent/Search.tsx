@@ -172,7 +172,7 @@ const Search = () => {
               <ul className="absolute top-10 right-0 bg-white shadow-md rounded w-44 z-20 p-2 space-y-2 text-sm">
                 {(user.role === "admin" || user.role === "manager") && (
                   <li className="hover:text-red-400">
-                    <Link to="/admin/product">Admin</Link>
+                    <Link to="/admin/dashboard">Admin</Link>
                   </li>
                 )}
                 <li className="hover:text-red-400">

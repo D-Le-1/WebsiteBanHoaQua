@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import BannerSlide from '../rating/BannerSlide';
+import BannerSlide from '../sideComponent/BannerSlide';
 import { useTranslation } from 'react-i18next';
 import { useCategory } from '../../useQuery/hooks/useCategory';
 import { Link, useParams } from 'react-router-dom';

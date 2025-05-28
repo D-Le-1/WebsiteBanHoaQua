@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useProduct } from '../../useQuery/hooks/useProduct';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import BannerSlide from '../rating/BannerSlide';
+import BannerSlide from '../sideComponent/BannerSlide';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -12,7 +12,9 @@ import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import Sort from '../sidebar/sortComponent';
+import StarRating from '../sideComponent/RatingStar';
 import Pagination from '../sidebar/paginationComponent';
+import useFavoriteStore from './../../zustand/store/wishListStore';
 
 const ProductList: React.FC = () => {
     const { t } = useTranslation();
@@ -24,6 +26,7 @@ const ProductList: React.FC = () => {
     const [productsToShow, setProductsToShow] = useState<Product[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 12;
+    const { addFavorite, removeFavorite, isFavorite } = useFavoriteStore();
   
     const filteredProducts = data?.products.filter((product: Product) => {
       const categoryMatch = selectedCategory === "Tất cả" || product.categoryName === selectedCategory;
@@ -100,6 +103,8 @@ const ProductList: React.FC = () => {
       }
   
       localStorage.setItem("cart", JSON.stringify(existingCart));
+
+      window.dispatchEvent(new Event("cartChanged"));
   
       toast.success("🛒 Sản phẩm đã được thêm vào giỏ hàng!", {
         position: "top-right",
@@ -188,6 +193,7 @@ const ProductList: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {productsToShow?.map((product: Product) => {
                 const discount = calculateDiscount(product.price, product.salePrice);
+                const isProductFavorite = isFavorite(product._id);
                 return (
                   <div
                     key={product._id}
@@ -205,10 +211,26 @@ const ProductList: React.FC = () => {
                         alt={product.name}
                         className="w-full h-full md:h-48 object-cover rounded"
                       />
+                      <div className="absolute top-0 left-0 p-2 z-10">
+                        <button
+                          onClick={() => {
+                            if (isProductFavorite) {
+                              removeFavorite(product._id);
+                            } else {
+                              addFavorite(product);
+                            }
+                          }}
+                          className="text-2xl focus:outline-none"
+                          title={isProductFavorite ? t("productPage.removeFavorite") : t("productPage.addFavorite")}
+                        >
+                          {isProductFavorite ? "❤️" : "🤍"}
+                        </button>
+                      </div>
                     </div>
                     <p className="text-sm text-gray-500 mt-2">
-                      {product.brand} || {Math.round(product.averageRating)}/5
+                      {product.brand}
                     </p>
+                    <StarRating averageRating={product.averageRating} />
                     <Link to={`/productdetail/${product._id}`}>
                       <h3 className="text-lg font-semibold text-gray-800 hover:text-orange-500 transition">
                         {product.name}

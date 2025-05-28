@@ -40,7 +40,7 @@ function BannerSlide() {
     }
   ]
   return (
-    <div>
+    <div className="w-full max-w-7xl mx-auto px-4 py-8">
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={50}
